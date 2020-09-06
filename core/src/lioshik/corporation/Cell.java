@@ -9,9 +9,14 @@ public class Cell extends Sprite {
     enum ColorState {
         EMPTY,
         COLOR1,
-        COLOR21Locked
+        COLOR1Locked,
+        COLOR2,
+        COLOR2Locked
     }
     public ColorState state;
+    public boolean isLocked() {
+        return state == ColorState.COLOR2Locked || state == ColorState.COLOR1Locked;
+    }
 
     public Cell(float posX, float posY, float size) {
         super(TextureContainer.cellEmpty);
@@ -22,13 +27,12 @@ public class Cell extends Sprite {
 
     private Texture prevTexture;
     private float animPaintDuration = 0.1f;
-    private float crAnimPaintDuration = 2.0f;
+    private float crAnimPaintDuration = 2.0f; // > animPaintDuration
 
     private void drawAnimPaint(SpriteBatch batch) {
         Sprite background = new Sprite(this);
         background.setTexture(prevTexture);
         background.draw(batch);
-        //this.setOrigin(this.getBoundingRectangle().x + this.getBoundingRectangle().width / 2, this.getBoundingRectangle().y + this.getBoundingRectangle().height / 2);
         Rectangle realBounds = this.getBoundingRectangle();
         Rectangle newBounds = new Rectangle(realBounds);
         float rectScale = crAnimPaintDuration / animPaintDuration;
@@ -41,6 +45,30 @@ public class Cell extends Sprite {
         this.setBounds(realBounds.x, realBounds.y, realBounds.width, realBounds.height);
     }
 
+    private float animShakeDuration = 0.3f;
+    private float crAnimShakeDuration = 2.0f; // > animPaintDuration
+    private int shakeCount = 5;
+
+    private void drawShakeAnim(SpriteBatch batch) {
+        float oneShakeDur = animShakeDuration / shakeCount;
+        int totalShakes = 0;
+        for (; oneShakeDur * (totalShakes + 1) < crAnimShakeDuration ; totalShakes++) { }
+        float addX;
+        if (crAnimShakeDuration - oneShakeDur * totalShakes <= oneShakeDur / 2) {
+            addX = this.getWidth() * 0.1f * (crAnimShakeDuration - oneShakeDur * totalShakes) / (oneShakeDur / 2);
+        } else {
+            addX = this.getWidth() * 0.1f * (1 - (crAnimShakeDuration - oneShakeDur * totalShakes - oneShakeDur / 2) / (oneShakeDur / 2));
+        }
+        if (totalShakes % 2 == 0) addX = -addX;
+        this.setX(this.getX() + addX);
+        this.draw(batch);
+        this.setX(this.getX() - addX);
+    }
+
+    public void startShakeAnim() {
+        crAnimShakeDuration = 0.0f;
+    }
+
     public void changeColor(ColorState newState) {
         state = newState;
         prevTexture = this.getTexture();
@@ -51,19 +79,28 @@ public class Cell extends Sprite {
             case COLOR1:
                 this.setTexture(TextureContainer.cellColor1);
                 break;
-            case COLOR21Locked:
+            case COLOR1Locked:
                 this.setTexture(TextureContainer.cellColor1locked);
+                break;
+            case COLOR2:
+                this.setTexture(TextureContainer.cellColor2);
+                break;
+            case COLOR2Locked:
+                this.setTexture(TextureContainer.cellColor2locked);
                 break;
         }
         crAnimPaintDuration = 0.0f;
     }
 
     public void update(float dt, SpriteBatch batch) {
+        crAnimPaintDuration += dt;
+        crAnimShakeDuration += dt;
         if (crAnimPaintDuration < animPaintDuration) {
-            crAnimPaintDuration += dt;
             drawAnimPaint(batch);
+        } else if (crAnimShakeDuration < animShakeDuration) {
+            drawShakeAnim(batch);
         } else {
-            draw(batch);
+                draw(batch);
         }
     }
 }

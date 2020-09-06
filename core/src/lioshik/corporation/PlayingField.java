@@ -26,12 +26,41 @@ public class PlayingField {
             }
         }
     }
+    private int checkedCellX = -1;
+    private int checkedCellY = -1;
+
+    public void checkCell(int x, int y) {
+        checkedCellX = x;
+        checkedCellY = y;
+    }
+
+    public void resetCheckedCell() {
+        checkedCellY = -1;
+        checkedCellX = -1;
+    }
 
     public void drawOnBatch(float dt, SpriteBatch batch) {
         for (int i = 0; i < widthCount; i++) {
             for (int j = 0; j < heightCount; j++) {
-                cellArray.get(i).get(j).update(dt, batch);
+                if (i == checkedCellX && j == checkedCellY) continue;
+                Cell crCell = cellArray.get(i).get(j);
+                crCell.update(dt, batch);
             }
+        }
+        if (checkedCellY != -1) {
+            int i = checkedCellX;
+            int j = checkedCellY;
+            Cell crCell = cellArray.get(i).get(j);
+            float prX = crCell.getX();
+            float prY = crCell.getY();
+            float prW = crCell.getWidth();
+            float prH = crCell.getHeight();
+            crCell.setX(crCell.getX() + crCell.getWidth() / 10);
+            crCell.setY(crCell.getY() + crCell.getHeight() / 10);crCell.setSize(crCell.getWidth() * 1.1f, crCell.getHeight() * 1.1f);
+            crCell.update(dt, batch);
+            crCell.setX(prX);
+            crCell.setY(prY);
+            crCell.setSize(prW, prH);
         }
     }
 

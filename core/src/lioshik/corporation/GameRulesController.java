@@ -1,13 +1,74 @@
 package lioshik.corporation;
 
+import java.util.ArrayDeque;
+import java.util.Queue;
+
 public class GameRulesController {
     MyGdxGame game;
 
-    public GameRulesController(MyGdxGame game) {
+    private int whichTurn = 0;
+    private int playersCount;
+
+    public GameRulesController(MyGdxGame game, int playersCount) {
         this.game = game;
+        this.playersCount = playersCount;
     }
 
-    public void cellTouched(int x, int y){
-        game.field.cellArray.get(x).get(y).changeColor(Cell.ColorState.COLOR1);
+    public void cellTouched(int x, int y) {
+        // will be initialized anyway
+        Cell.ColorState crLockedColor = null, crTargetColor = null;
+
+        switch (whichTurn) {
+            case 0:
+                crLockedColor = Cell.ColorState.COLOR1Locked;
+                crTargetColor = Cell.ColorState.COLOR1;
+                break;
+            case 1:
+                crLockedColor = Cell.ColorState.COLOR2Locked;
+                crTargetColor = Cell.ColorState.COLOR2;
+                break;
+        }
+        if (cellAvailableForColor(x, y, crLockedColor, crTargetColor)) {
+            if (game.field.cellArray.get(x).get(y).state == Cell.ColorState.EMPTY) {
+                game.field.cellArray.get(x).get(y).changeColor(crTargetColor);
+            } else {
+                game.field.cellArray.get(x).get(y).changeColor(crLockedColor);
+            }
+            whichTurn = (whichTurn + 1) % playersCount;
+        } else {
+            game.field.cellArray.get(x).get(y).startShakeAnim();
+        }
+    }
+
+    public boolean cellAvailableForColor(int x, int y, Cell.ColorState lockedColor, Cell.ColorState targetColor) {
+        Cell crCell = game.field.cellArray.get(x).get(y);
+        if (crCell.state == lockedColor || crCell.state == targetColor || crCell.isLocked()) return false;
+        Queue<int[]> qu = new ArrayDeque<>();
+        qu.offer(new int[] {x, y});
+        boolean used[][] = new boolean[game.field.widthCount][game.field.heightCount];
+        used[x][y] = true;
+        while (!qu.isEmpty()) {
+            int crX = qu.peek()[0];
+            int crY = qu.peek()[1];
+            qu.remove();
+            crCell = game.field.cellArray.get(crX).get(crY);
+
+            if (crCell.state == targetColor) return true;
+            if (!(crX == x && crY == y) && crCell.state != lockedColor) continue;
+
+            for (int addX = -1; addX < 2; addX++) {
+                for (int addY = -1; addY < 2; addY++) {
+                    if (addX == 0 && addY == 0) continue;
+                    int newX = crX + addX;
+                    int newY = crY + addY;
+                    if (newX < 0 || newX >= game.field.widthCount || newY < 0 || newY >= game.field.heightCount) continue;
+                    if (!used[newX][newY]) {
+                        used[newX][newY] = true;
+                        qu.offer(new int[] {newX, newY});
+                    }
+                }
+            }
+        }
+        return false;
     }
 }
