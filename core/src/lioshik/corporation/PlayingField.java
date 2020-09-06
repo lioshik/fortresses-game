@@ -1,6 +1,8 @@
 package lioshik.corporation;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -25,11 +27,34 @@ public class PlayingField {
         }
     }
 
-    public void drawOnBatch(Batch batch) {
+    public void drawOnBatch(float dt, SpriteBatch batch) {
         for (int i = 0; i < widthCount; i++) {
             for (int j = 0; j < heightCount; j++) {
-                cellArray.get(i).get(j).draw(batch);
+                cellArray.get(i).get(j).update(dt, batch);
             }
         }
+    }
+
+    public boolean anyCellTouched(int screenX, int screenY) {
+        for (List<Cell> lst : cellArray) {
+            for (Cell c : lst) {
+                if (c.getBoundingRectangle().contains(new Vector2(screenX, screenY))) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public int[] getTouchedCellCord(int screenX, int screenY) {
+        for (int i = 0; i < widthCount; i++) {
+            for (int j = 0; j < heightCount; j++) {
+                if (cellArray.get(i).get(j).getBoundingRectangle().contains(new Vector2(screenX, screenY))){
+                    return new int[] {i, j};
+                }
+            }
+        }
+        // never reached
+        return new int[] {0, 0};
     }
 }
