@@ -25,8 +25,6 @@ public class MyGdxGame extends ApplicationAdapter {
 		cam.position.set(cam.viewportWidth / 2f, cam.viewportHeight / 2f, 0);
 		batch = new SpriteBatch();
 		field = new PlayingField(10, 10, new Rectangle(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
-		field.cellArray.get(0).get(0).changeColor(Cell.ColorState.COLOR1);
-		field.cellArray.get(field.widthCount - 1).get(field.heightCount - 1).changeColor(Cell.ColorState.COLOR2);
 		Gdx.input.setInputProcessor(new InputAdapter(){
 			@Override
 			public boolean touchUp(int screenX, int screenY, int pointer, int button) {
@@ -46,7 +44,6 @@ public class MyGdxGame extends ApplicationAdapter {
 				Vector3 touchVector = cam.unproject(new Vector3(screenX, screenY, 0));
 				screenX = (int) touchVector.x;
 				screenY = (int) touchVector.y;
-				field.resetCheckedCell();
 				if (field.anyCellTouched(screenX, screenY)) {
 					int[] cord = field.getTouchedCellCord(screenX, screenY);
 					field.checkCell(cord[0], cord[1]);

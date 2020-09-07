@@ -30,11 +30,20 @@ public class PlayingField {
     private int checkedCellY = -1;
 
     public void checkCell(int x, int y) {
+        if (x == checkedCellX && y == checkedCellY) return;
+        resetCheckedCell();
+        if (checkedCellY != -1) {
+            cellArray.get(checkedCellX).get(checkedCellY).startDownAnimation();
+        }
         checkedCellX = x;
         checkedCellY = y;
+        cellArray.get(x).get(y).startUpAnimation();
     }
 
     public void resetCheckedCell() {
+        if (checkedCellY != -1) {
+            cellArray.get(checkedCellX).get(checkedCellY).startDownAnimation();
+        }
         checkedCellY = -1;
         checkedCellX = -1;
     }
@@ -51,16 +60,7 @@ public class PlayingField {
             int i = checkedCellX;
             int j = checkedCellY;
             Cell crCell = cellArray.get(i).get(j);
-            float prX = crCell.getX();
-            float prY = crCell.getY();
-            float prW = crCell.getWidth();
-            float prH = crCell.getHeight();
-            crCell.setX(crCell.getX() + crCell.getWidth() / 10);
-            crCell.setY(crCell.getY() + crCell.getHeight() / 10);crCell.setSize(crCell.getWidth() * 1.1f, crCell.getHeight() * 1.1f);
             crCell.update(dt, batch);
-            crCell.setX(prX);
-            crCell.setY(prY);
-            crCell.setSize(prW, prH);
         }
     }
 

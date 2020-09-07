@@ -7,11 +7,15 @@ public class GameRulesController {
     MyGdxGame game;
 
     private int whichTurn = 0;
+    private boolean[] firstTurn;
+    private int oneTurnCount= 0;
     private int playersCount;
 
     public GameRulesController(MyGdxGame game, int playersCount) {
         this.game = game;
         this.playersCount = playersCount;
+        firstTurn = new boolean[playersCount];
+        for (int i = 0; i < playersCount; i++) firstTurn[i] = true;
     }
 
     public void cellTouched(int x, int y) {
@@ -29,18 +33,26 @@ public class GameRulesController {
                 break;
         }
         if (cellAvailableForColor(x, y, crLockedColor, crTargetColor)) {
+            firstTurn[whichTurn] = false;
             if (game.field.cellArray.get(x).get(y).state == Cell.ColorState.EMPTY) {
                 game.field.cellArray.get(x).get(y).changeColor(crTargetColor);
             } else {
                 game.field.cellArray.get(x).get(y).changeColor(crLockedColor);
             }
-            whichTurn = (whichTurn + 1) % playersCount;
+            oneTurnCount++;
+            if (oneTurnCount == 3) {
+                whichTurn = (whichTurn + 1) % playersCount;
+                oneTurnCount = 0;
+            }
         } else {
             game.field.cellArray.get(x).get(y).startShakeAnim();
         }
     }
 
     public boolean cellAvailableForColor(int x, int y, Cell.ColorState lockedColor, Cell.ColorState targetColor) {
+        if ((firstTurn[whichTurn] && (x == 0 || x == game.field.widthCount - 1) && (y == 0 || y == game.field.heightCount - 1))) {
+            return true;
+        }
         Cell crCell = game.field.cellArray.get(x).get(y);
         if (crCell.state == lockedColor || crCell.state == targetColor || crCell.isLocked()) return false;
         Queue<int[]> qu = new ArrayDeque<>();

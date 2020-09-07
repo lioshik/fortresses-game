@@ -29,7 +29,10 @@ public class Cell extends Sprite {
     private float animPaintDuration = 0.1f;
     private float crAnimPaintDuration = 2.0f; // > animPaintDuration
 
-    private void drawAnimPaint(SpriteBatch batch) {
+    private void transformAnimPaint(SpriteBatch batch) {
+        if (crAnimPaintDuration >= animPaintDuration) {
+            return;
+        }
         Sprite background = new Sprite(this);
         background.setTexture(prevTexture);
         background.draw(batch);
@@ -41,15 +44,16 @@ public class Cell extends Sprite {
         newBounds.width *= rectScale;
         newBounds.height *= rectScale;
         this.setBounds(newBounds.x, newBounds.y, newBounds.width, newBounds.height);
-        this.draw(batch);
-        this.setBounds(realBounds.x, realBounds.y, realBounds.width, realBounds.height);
     }
 
     private float animShakeDuration = 0.3f;
-    private float crAnimShakeDuration = 2.0f; // > animPaintDuration
-    private int shakeCount = 5;
+    private float crAnimShakeDuration = 2.0f; // > animShakeDuration
+    private int shakeCount = 6;
 
-    private void drawShakeAnim(SpriteBatch batch) {
+    private void transformShakeAnim(SpriteBatch batch) {
+        if (crAnimShakeDuration >= animShakeDuration) {
+            return;
+        }
         float oneShakeDur = animShakeDuration / shakeCount;
         int totalShakes = 0;
         for (; oneShakeDur * (totalShakes + 1) < crAnimShakeDuration ; totalShakes++) { }
@@ -61,12 +65,43 @@ public class Cell extends Sprite {
         }
         if (totalShakes % 2 == 0) addX = -addX;
         this.setX(this.getX() + addX);
-        this.draw(batch);
-        this.setX(this.getX() - addX);
+    }
+
+    private float animUpDuration = 0.1f;
+    private float crAnimUpDuration = 2.0f; // > animUpDuration
+    private float animDownDuration = 0.1f;
+    private float crAnimDownDuration = 2.0f; // > animDownDuration
+    private boolean isUp = false;
+
+    private void transformUpAnimation(SpriteBatch batch) {
+        if (isUp) {
+            float scale = Math.min(1.0f, crAnimUpDuration / animUpDuration);
+            this.setPosition(this.getX() + this.getWidth() / 10.0f * scale, this.getY() + this.getHeight() / 10.0f * scale);
+            this.setSize(this.getWidth()  + this.getWidth() * 0.1f * scale, this.getHeight() + this.getHeight()* 0.1f * scale);
+        } else {
+            float scale = Math.min(1.0f, crAnimDownDuration / animDownDuration);
+            scale = 1.0f - scale;
+            this.setPosition(this.getX() + this.getWidth() / 10.0f * scale, this.getY() + this.getHeight() / 10.0f * scale);
+            this.setSize(this.getWidth() + this.getWidth() * 0.1f * scale, this.getHeight() + this.getHeight()* 0.1f * scale);
+        }
     }
 
     public void startShakeAnim() {
         crAnimShakeDuration = 0.0f;
+    }
+
+    public void startUpAnimation() {
+        if (!isUp) {
+            isUp = true;
+            crAnimUpDuration = 0.0f;
+        }
+    }
+
+    public void startDownAnimation() {
+        if (isUp) {
+            isUp = false;
+            crAnimDownDuration = 0.0f;
+        }
     }
 
     public void changeColor(ColorState newState) {
@@ -95,12 +130,13 @@ public class Cell extends Sprite {
     public void update(float dt, SpriteBatch batch) {
         crAnimPaintDuration += dt;
         crAnimShakeDuration += dt;
-        if (crAnimPaintDuration < animPaintDuration) {
-            drawAnimPaint(batch);
-        } else if (crAnimShakeDuration < animShakeDuration) {
-            drawShakeAnim(batch);
-        } else {
-                draw(batch);
-        }
+        crAnimDownDuration += dt;
+        crAnimUpDuration += dt;
+        Rectangle defaultBounds = this.getBoundingRectangle();
+        transformAnimPaint(batch);
+        transformShakeAnim(batch);
+        transformUpAnimation(batch);
+        draw(batch);
+        this.setBounds(defaultBounds.x, defaultBounds.y, defaultBounds.width, defaultBounds.width);
     }
 }
