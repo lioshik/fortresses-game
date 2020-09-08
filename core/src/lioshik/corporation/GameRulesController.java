@@ -4,14 +4,15 @@ import java.util.ArrayDeque;
 import java.util.Queue;
 
 public class GameRulesController {
-    MyGdxGame game;
+    GameScreen game;
 
     private int whichTurn = 0;
     private boolean[] firstTurn;
     private int oneTurnCount= 0;
     private int playersCount;
+    private final Cell.ColorState[] colors = {Cell.ColorState.COLOR1, Cell.ColorState.COLOR2, Cell.ColorState.COLOR3};
 
-    public GameRulesController(MyGdxGame game, int playersCount) {
+    public GameRulesController(GameScreen game, int playersCount) {
         this.game = game;
         this.playersCount = playersCount;
         firstTurn = new boolean[playersCount];
@@ -31,6 +32,10 @@ public class GameRulesController {
                 crLockedColor = Cell.ColorState.COLOR2Locked;
                 crTargetColor = Cell.ColorState.COLOR2;
                 break;
+            case 2:
+                crLockedColor = Cell.ColorState.COLOR3Locked;
+                crTargetColor = Cell.ColorState.COLOR3;
+                break;
         }
         if (cellAvailableForColor(x, y, crLockedColor, crTargetColor)) {
             firstTurn[whichTurn] = false;
@@ -40,9 +45,12 @@ public class GameRulesController {
                 game.field.cellArray.get(x).get(y).changeColor(crLockedColor);
             }
             oneTurnCount++;
+            game.field.targetLineScale = 1 / 3.0f * oneTurnCount;
             if (oneTurnCount == 3) {
                 whichTurn = (whichTurn + 1) % playersCount;
+                game.field.targetLineScale = 0.0f;
                 oneTurnCount = 0;
+                game.field.nextLineColorState = colors[whichTurn];
             }
         } else {
             game.field.cellArray.get(x).get(y).startShakeAnim();
