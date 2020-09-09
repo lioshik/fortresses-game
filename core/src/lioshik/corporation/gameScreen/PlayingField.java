@@ -1,4 +1,4 @@
-package lioshik.corporation;
+package lioshik.corporation.gameScreen;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -60,7 +60,7 @@ public class PlayingField {
         checkedCellX = -1;
     }
 
-    private float speedLineMove = 1f / 3f * 15;
+    private float speedLineMove = 1f / 3f * 8;
     private void moveLine(float dt) {
         if (crLineScale < targetLineScale) {
             crLineScale += speedLineMove * dt;

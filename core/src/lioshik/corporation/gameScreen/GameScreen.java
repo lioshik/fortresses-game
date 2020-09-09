@@ -1,4 +1,4 @@
-package lioshik.corporation;
+package lioshik.corporation.gameScreen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;

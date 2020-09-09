@@ -1,9 +1,9 @@
-package lioshik.corporation.client;
+package lioshik.corporation.gameScreen.client;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
-import lioshik.corporation.MyGdxGame;
+import lioshik.corporation.gameScreen.MyGdxGame;
 
 public class HtmlLauncher extends GwtApplication {
 

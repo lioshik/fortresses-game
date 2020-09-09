@@ -1,4 +1,4 @@
-package lioshik.corporation;
+package lioshik.corporation.gameScreen;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;

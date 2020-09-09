@@ -1,4 +1,4 @@
-package lioshik.corporation;
+package lioshik.corporation.gameScreen;
 
 import java.util.ArrayDeque;
 import java.util.Queue;
