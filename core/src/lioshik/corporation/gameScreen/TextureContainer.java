@@ -5,8 +5,23 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 
 public class TextureContainer {
-    public static Texture buttonPlayUp = new Texture(Gdx.files.internal("button_one_player_default.png"));
-    public static Texture buttonPlayDown = new Texture(Gdx.files.internal("button_one_player_pressed.png"));
+    public static Texture titleTexture = new Texture(Gdx.files.internal("title_texture.png"));
+    public static Texture buttonBackUp = new Texture(Gdx.files.internal("button_back_default.png"));
+    public static Texture buttonBackDown = new Texture(Gdx.files.internal("button_back_default.png"));
+    public static Texture buttonSinglePlayerUp = new Texture(Gdx.files.internal("button_one_player_default.png"));
+    public static Texture buttonSinglePlayerDown = new Texture(Gdx.files.internal("button_one_player_default.png"));
+    public static Texture buttonMultiPlayerUp = new Texture(Gdx.files.internal("button_multiplayer_default.png"));
+    public static Texture buttonMultiPlayerDown = new Texture(Gdx.files.internal("button_multiplayer_default.png"));
+    public static Texture buttonExitUp = new Texture(Gdx.files.internal("button_exit_default.png"));
+    public static Texture buttonExitDown = new Texture(Gdx.files.internal("button_exit_default.png"));
+    public static Texture buttonVs1Up = new Texture(Gdx.files.internal("button_vs1_default.png"));
+    public static Texture buttonVs1Down = new Texture(Gdx.files.internal("button_vs1_default.png"));
+    public static Texture buttonVs2Up = new Texture(Gdx.files.internal("button_vs2_default.png"));
+    public static Texture buttonVs2Down = new Texture(Gdx.files.internal("button_vs2_default.png"));
+    public static Texture buttonPlayers2Up = new Texture(Gdx.files.internal("button_players2_default.png"));
+    public static Texture buttonPlayers2Down = new Texture(Gdx.files.internal("button_players2_default.png"));
+    public static Texture buttonPlayers3Up = new Texture(Gdx.files.internal("button_players3_default.png"));
+    public static Texture buttonPlayers3Down = new Texture(Gdx.files.internal("button_players3_default.png"));
     public static Texture cellEmpty = new Texture(Gdx.files.internal("texture_empty_cell.png"));
     public static Texture cellColor1 = new Texture(Gdx.files.internal("texture_color1_cell.png"));
     public static Texture cellColor2 = new Texture(Gdx.files.internal("texture_color2_cell.png"));

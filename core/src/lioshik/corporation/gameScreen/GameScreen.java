@@ -16,9 +16,15 @@ public class GameScreen extends ScreenAdapter {
     public GameRulesController rulesController;
     public OrthographicCamera cam;
 
+    public int players;
+
+    public GameScreen(int p) {
+        players = p;
+    }
+
     @Override
     public void show () {
-        rulesController = new GameRulesController(this, 3);
+        rulesController = new GameRulesController(this, players);
         cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         cam.position.set(cam.viewportWidth / 2f, cam.viewportHeight / 2f, 0);
         batch = new SpriteBatch();
