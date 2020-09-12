@@ -4,9 +4,9 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -27,30 +27,87 @@ public class mainScreen extends ScreenAdapter {
     public Image titleImage;
     public Game game;
 
+    enum buttonsState {
+        Main,
+        SinglePlayer,
+        Multiplayer
+    }
+
+    public buttonsState crState = buttonsState.Main;
+
     public mainScreen(Game g) {
         game = g;
     }
 
-    public void setAllButtonsVisible(boolean v) {
-        setMainButtonsVisible(v);
-        setSinglePlayerButtonsVisible(v);
-        setMultiPlayerButtonsVisible(false);
+    public void addTransformAnim(ImageButton imageButton, boolean right, boolean reverse, float delay, float duration) {
+        imageButton.setTransform(true);
+        float moveLength = imageButton.getWidth() / 5.0f;
+        if (right) {
+            if (!reverse)
+                imageButton.addAction(Actions.sequence(Actions.delay(delay),
+                        Actions.moveBy(moveLength, 0, 0),
+                        Actions.visible(true),
+                        Actions.moveBy(-moveLength, 0, duration)
+                        ));
+            if (reverse)
+                imageButton.addAction(Actions.sequence(Actions.delay(delay),
+                        Actions.moveBy(moveLength, 0, duration),
+                        Actions.visible(false),
+                        Actions.moveBy(-moveLength, 0, 0)
+                ));
+        } else {
+            if (!reverse)
+                imageButton.addAction(Actions.sequence(Actions.delay(delay),
+                        Actions.moveBy(-moveLength, 0, 0),
+                        Actions.visible(true),
+                        Actions.moveBy(moveLength, 0, duration)
+                ));
+            if (reverse)
+                imageButton.addAction(Actions.sequence(Actions.delay(delay),
+                        Actions.moveBy(-moveLength, 0, duration),
+                        Actions.visible(false),
+                        Actions.moveBy(moveLength, 0, 0)
+                ));
+        }
+    }
+
+    public void hideAllButtons() {
+        switch (crState) {
+            case Main:
+                addTransformAnim(buttonSinglePlayer, true, true, 0, 0.2f);
+                addTransformAnim(buttonMultiPlayer, false, true, 0, 0.2f);
+                addTransformAnim(buttonExit, true, true, 0, 0.2f);
+                break;
+            case SinglePlayer:
+                addTransformAnim(buttonVs1, true, true, 0, 0.2f);
+                addTransformAnim(buttonVs2, false, true, 0, 0.2f);
+                addTransformAnim(buttonBack, true, true, 0, 0.2f);
+                break;
+            case Multiplayer:
+                addTransformAnim(buttonPlayers2, true, true, 0, 0.2f);
+                addTransformAnim(buttonPlayers3, false, true, 0, 0.2f);
+                addTransformAnim(buttonBack, true, true, 0, 0.2f);
+                break;
+        }
     }
 
     public void setMainButtonsVisible(boolean v) {
-        buttonExit.setVisible(v);
-        buttonSinglePlayer.setVisible(v);
-        buttonMultiPlayer.setVisible(v);
+        addTransformAnim(buttonSinglePlayer, true, false, 0.2f, 0.2f);
+        addTransformAnim(buttonMultiPlayer, false, false, 0.2f, 0.2f);
+        addTransformAnim(buttonExit, true, false, 0.2f, 0.2f);
+        crState = buttonsState.Main;
     }
     public void setSinglePlayerButtonsVisible(boolean v) {
-        buttonBack.setVisible(v);
-        buttonVs1.setVisible(v);
-        buttonVs2.setVisible(v);
+        addTransformAnim(buttonVs1, true, false, 0.2f, 0.2f);
+        addTransformAnim(buttonVs2, false, false, 0.2f, 0.2f);
+        addTransformAnim(buttonBack, true, false, 0.2f, 0.2f);
+        crState = buttonsState.SinglePlayer;
     }
     public void setMultiPlayerButtonsVisible(boolean v) {
-        buttonBack.setVisible(v);
-        buttonPlayers3.setVisible(v);
-        buttonPlayers2.setVisible(v);
+        addTransformAnim(buttonPlayers2, true, false, 0.2f, 0.2f);
+        addTransformAnim(buttonPlayers3, false, false, 0.2f, 0.2f);
+        addTransformAnim(buttonBack, true, false, 0.2f, 0.2f);
+        crState = buttonsState.Multiplayer;
     }
 
     @Override
@@ -85,6 +142,14 @@ public class mainScreen extends ScreenAdapter {
         buttonBack.setPosition(buttonExit.getX(), buttonExit.getY());
         buttonPlayers2.setPosition(buttonSinglePlayer.getX(), buttonSinglePlayer.getY());
         buttonPlayers3.setPosition(buttonMultiPlayer.getX(), buttonMultiPlayer.getY());
+        buttonExit.setVisible(false);
+        buttonMultiPlayer.setVisible(false);
+        buttonSinglePlayer.setVisible(false);
+        buttonBack.setVisible(false);
+        buttonVs2.setVisible(false);
+        buttonVs1.setVisible(false);
+        buttonPlayers2.setVisible(false);
+        buttonPlayers3.setVisible(false);
 
         titleImage = new Image(TextureContainer.titleTexture);
         scale = (float) (stage.getWidth() * 0.8 / titleImage.getWidth());
@@ -99,7 +164,6 @@ public class mainScreen extends ScreenAdapter {
         stage.addActor(buttonBack);
         stage.addActor(buttonPlayers2);
         stage.addActor(buttonPlayers3);
-        setAllButtonsVisible(false);
         setMainButtonsVisible(true);
 
         buttonExit.addListener(new ClickListener() {
@@ -112,7 +176,7 @@ public class mainScreen extends ScreenAdapter {
         buttonSinglePlayer.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent e, float x, float y) {
-                setAllButtonsVisible(false);
+                hideAllButtons();
                 setSinglePlayerButtonsVisible(true);
             }
         });
@@ -120,7 +184,7 @@ public class mainScreen extends ScreenAdapter {
         buttonBack.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent e, float x, float y) {
-                setAllButtonsVisible(false);
+                hideAllButtons();
                 setMainButtonsVisible(true);
             }
         });
@@ -128,7 +192,7 @@ public class mainScreen extends ScreenAdapter {
         buttonMultiPlayer.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent e, float x, float y) {
-                setAllButtonsVisible(false);
+                hideAllButtons();
                 setMultiPlayerButtonsVisible(true);
             }
         });
@@ -151,6 +215,7 @@ public class mainScreen extends ScreenAdapter {
     public void render(float dt) {
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        stage.act(dt);
         stage.draw();
     }
 

@@ -6,11 +6,12 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.graphics.Color;
 
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
 
 public class PlayingField {
     public List<List<Cell>> cellArray;
+    public Set<int[]> checkedSet;
     public int widthCount, heightCount;
     private Rectangle tableRectangle;
     private float lineWidth;
@@ -20,44 +21,47 @@ public class PlayingField {
     public Cell.ColorState nextLineColorState;
 
     public PlayingField(int widthCount, int heightCount, Rectangle rect) {
+        checkedSet = new TreeSet<>(new Comparator<int[]>() {
+            @Override
+            public int compare(int[] o1, int[] o2) {
+                if (o1[0] == o2[0] && o1[1] == o2[1]) return 0;
+                if (o1[0] == o2[0]) return o1[1] - o2[1];
+                return o1[0] - o2[0];
+            }
+        });
         this.widthCount = widthCount;
         this.heightCount = heightCount;
         float cellSize = (float) Math.min(rect.getWidth() / widthCount, rect.getHeight() / heightCount);
-        cellSize *= 0.9;
-        lineWidth = (float) (Math.min((rect.getWidth() - (cellSize * widthCount)) / 2.0d, (rect.getHeight() - (cellSize * heightCount)) / 2.0d));
+        float cellDist = cellSize * 0.05f;
+        cellSize *= 0.8;
+        lineWidth = (float) (Math.min((rect.getWidth() - (cellSize * widthCount + cellDist * (widthCount - 1))) / 2.0d, (rect.getHeight() - (cellSize * heightCount + cellDist * (heightCount - 1))) / 2.0d));
         float linePadding = lineWidth * 0.4f;
         lineWidth -= linePadding;
-        float cornerX = (float) (rect.x + (rect.getWidth() - (cellSize * widthCount)) / 2.0d);
-        float cornerY = (float) (rect.y + (rect.getHeight() - (cellSize * heightCount)) / 2.0d);
-        tableRectangle = new Rectangle((int) (cornerX - linePadding), (int) (cornerY - linePadding), (int) (cellSize * widthCount + linePadding * 2), (int) (cellSize * heightCount + linePadding * 2));
+        float cornerX = (float) (rect.x + (rect.getWidth() - (cellSize * widthCount + cellDist * (widthCount - 1))) / 2.0d);
+        float cornerY = (float) (rect.y + (rect.getHeight() - (cellSize * heightCount + cellDist * (heightCount - 1))) / 2.0d);
+        tableRectangle = new Rectangle((int) (cornerX - linePadding), (int) (cornerY - linePadding), (int) (cellSize * widthCount + cellDist * (widthCount - 1) + linePadding * 2), (int) (cellSize * heightCount + cellDist * (heightCount - 1) + linePadding * 2));
         cellArray = new ArrayList<List<Cell>>();
         for (int i = 0; i < widthCount; i++) {
             cellArray.add(new ArrayList<Cell>(heightCount));
             for (int j = 0; j < heightCount; j++) {
-                cellArray.get(i).add(new Cell(cornerX + cellSize * i, cornerY + cellSize * j, cellSize));
+                cellArray.get(i).add(new Cell(cornerX + cellSize * i + cellDist * (i - 1), cornerY + cellSize * j + + cellDist * (j - 1), cellSize));
             }
         }
     }
-    private int checkedCellX = -1;
-    private int checkedCellY = -1;
-
     public void checkCell(int x, int y) {
-        if (x == checkedCellX && y == checkedCellY) return;
-        resetCheckedCell();
-        if (checkedCellY != -1) {
-            cellArray.get(checkedCellX).get(checkedCellY).startDownAnimation();
-        }
-        checkedCellX = x;
-        checkedCellY = y;
+        checkedSet.add(new int[]{x, y});
         cellArray.get(x).get(y).startUpAnimation();
     }
 
     public void resetCheckedCell() {
-        if (checkedCellY != -1) {
-            cellArray.get(checkedCellX).get(checkedCellY).startDownAnimation();
+        Iterator<int[]> it = checkedSet.iterator();
+        System.out.println(checkedSet.size());
+        while (it.hasNext()) {
+            int[] cr = it.next();
+            System.out.println(cr[0] + " " + cr[1]);
+            cellArray.get(cr[0]).get(cr[1]).startDownAnimation();
         }
-        checkedCellY = -1;
-        checkedCellX = -1;
+        checkedSet.clear();
     }
 
     private float speedLineMove = 1f / 3f * 8;
@@ -112,16 +116,15 @@ public class PlayingField {
         batch.begin();
         for (int i = 0; i < widthCount; i++) {
             for (int j = 0; j < heightCount; j++) {
-                if (i == checkedCellX && j == checkedCellY) continue;
+                if (checkedSet.contains(new int[] {i, j})) continue;
                 Cell crCell = cellArray.get(i).get(j);
                 crCell.update(dt, batch);
             }
         }
-        if (checkedCellY != -1) {
-            int i = checkedCellX;
-            int j = checkedCellY;
-            Cell crCell = cellArray.get(i).get(j);
-            crCell.update(dt, batch);
+        Iterator<int[]> it = checkedSet.iterator();
+        while (it.hasNext()) {
+            int[] cr = it.next();
+            cellArray.get(cr[0]).get(cr[1]).update(dt, batch);
         }
         batch.end();
     }

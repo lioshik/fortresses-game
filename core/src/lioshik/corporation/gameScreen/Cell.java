@@ -69,22 +69,22 @@ public class Cell extends Sprite {
         this.setX(this.getX() + addX);
     }
 
-    private float animUpDuration = 0.05f;
+    private float animUpDuration = 0.1f;
     private float crAnimUpDuration = 2.0f; // > animUpDuration
-    private float animDownDuration = 0.05f;
+    private float animDownDuration = 0.1f;
     private float crAnimDownDuration = 2.0f; // > animDownDuration
     private boolean isUp = false;
 
     private void transformUpAnimation(SpriteBatch batch) {
         if (isUp) {
             float scale = Math.min(1.0f, crAnimUpDuration / animUpDuration);
-            this.setPosition(this.getX() + this.getWidth() / 10.0f * scale, this.getY() + this.getHeight() / 10.0f * scale);
-            this.setSize(this.getWidth()  + this.getWidth() * 0.1f * scale, this.getHeight() + this.getHeight()* 0.1f * scale);
+            this.setPosition(this.getX() - this.getWidth() / 40.0f * scale, this.getY() - this.getHeight() / 40.0f * scale);
+            this.setSize(this.getWidth() + this.getWidth() * 0.05f * scale, this.getHeight() + this.getHeight()* 0.05f * scale);
         } else {
             float scale = Math.min(1.0f, crAnimDownDuration / animDownDuration);
             scale = 1.0f - scale;
-            this.setPosition(this.getX() + this.getWidth() / 10.0f * scale, this.getY() + this.getHeight() / 10.0f * scale);
-            this.setSize(this.getWidth() + this.getWidth() * 0.1f * scale, this.getHeight() + this.getHeight()* 0.1f * scale);
+            this.setPosition(this.getX() - this.getWidth() / 40.0f * scale, this.getY() - this.getHeight() / 40.0f * scale);
+            this.setSize(this.getWidth() + this.getWidth() * 0.05f * scale, this.getHeight() + this.getHeight()* 0.05f * scale);
         }
     }
 

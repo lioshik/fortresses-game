@@ -17,6 +17,7 @@ public class GameRulesController {
         this.playersCount = playersCount;
         firstTurn = new boolean[playersCount];
         for (int i = 0; i < playersCount; i++) firstTurn[i] = true;
+        updateAvailableCells();
     }
 
     public void cellTouched(int x, int y) {
@@ -55,10 +56,37 @@ public class GameRulesController {
         } else {
             game.field.cellArray.get(x).get(y).startShakeAnim();
         }
+        updateAvailableCells();
+    }
+
+    public void updateAvailableCells() {
+        game.field.resetCheckedCell();
+        Cell.ColorState crLockedColor = null, crTargetColor = null;
+        switch (whichTurn) {
+            case 0:
+                crLockedColor = Cell.ColorState.COLOR1Locked;
+                crTargetColor = Cell.ColorState.COLOR1;
+                break;
+            case 1:
+                crLockedColor = Cell.ColorState.COLOR2Locked;
+                crTargetColor = Cell.ColorState.COLOR2;
+                break;
+            case 2:
+                crLockedColor = Cell.ColorState.COLOR3Locked;
+                crTargetColor = Cell.ColorState.COLOR3;
+                break;
+        }
+        for (int x = 0; x < game.field.widthCount; x++) {
+            for (int y = 0; y < game.field.heightCount; y++) {
+                if (cellAvailableForColor(x, y, crLockedColor, crTargetColor)) {
+                    game.field.checkCell(x, y);
+                }
+            }
+        }
     }
 
     public boolean cellAvailableForColor(int x, int y, Cell.ColorState lockedColor, Cell.ColorState targetColor) {
-        if ((firstTurn[whichTurn] && (x == 0 || x == game.field.widthCount - 1) && (y == 0 || y == game.field.heightCount - 1))) {
+        if ((firstTurn[whichTurn] && (x == 0 || x == game.field.widthCount - 1) && (y == 0 || y == game.field.heightCount - 1) && game.field.cellArray.get(x).get(y).state == Cell.ColorState.EMPTY)) {
             return true;
         }
         Cell crCell = game.field.cellArray.get(x).get(y);
