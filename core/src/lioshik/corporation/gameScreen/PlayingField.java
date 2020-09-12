@@ -48,6 +48,26 @@ public class PlayingField {
             }
         }
     }
+
+    private int crClickedX = -1;
+    private int crClickedY = -1;
+
+    public void clickCell(int x, int y) {
+        if (x == crClickedX && y == crClickedY) return;
+        if (crClickedX != -1) {
+            cellArray.get(crClickedX).get(crClickedY).startClickDownAnim();
+        }
+        cellArray.get(x).get(y).startClickUpAnim();
+        crClickedX = x;
+        crClickedY = y;
+    }
+
+    public void resetClickedCell() {
+        if (crClickedX != -1) cellArray.get(crClickedX).get(crClickedY).startClickDownAnim();
+        crClickedX = -1;
+        crClickedY = -1;
+    }
+
     public void checkCell(int x, int y) {
         checkedSet.add(new int[]{x, y});
         cellArray.get(x).get(y).startUpAnimation();
@@ -116,7 +136,7 @@ public class PlayingField {
         batch.begin();
         for (int i = 0; i < widthCount; i++) {
             for (int j = 0; j < heightCount; j++) {
-                if (checkedSet.contains(new int[] {i, j})) continue;
+                if (checkedSet.contains(new int[] {i, j}) || i == crClickedX && j == crClickedY) continue;
                 Cell crCell = cellArray.get(i).get(j);
                 crCell.update(dt, batch);
             }
@@ -124,7 +144,11 @@ public class PlayingField {
         Iterator<int[]> it = checkedSet.iterator();
         while (it.hasNext()) {
             int[] cr = it.next();
+            if (cr.equals(new int[] {crClickedX, crClickedY})) continue;
             cellArray.get(cr[0]).get(cr[1]).update(dt, batch);
+        }
+        if (crClickedX != -1) {
+            cellArray.get(crClickedX).get(crClickedY).update(dt, batch);
         }
         batch.end();
     }

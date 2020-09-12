@@ -53,10 +53,10 @@ public class GameRulesController {
                 oneTurnCount = 0;
                 game.field.nextLineColorState = colors[whichTurn];
             }
+            updateAvailableCells();
         } else {
             game.field.cellArray.get(x).get(y).startShakeAnim();
         }
-        updateAvailableCells();
     }
 
     public void updateAvailableCells() {

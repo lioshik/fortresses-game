@@ -35,11 +35,10 @@ public class GameScreen extends ScreenAdapter {
                 Vector3 touchVector = cam.unproject(new Vector3(screenX, screenY, 0));
                 screenX = (int) touchVector.x;
                 screenY = (int) touchVector.y;
-                field.resetCheckedCell();
-                rulesController.updateAvailableCells();
                 if (field.anyCellTouched(screenX, screenY)) {
                     int[] cord = field.getTouchedCellCord(screenX, screenY);
                     rulesController.cellTouched(cord[0], cord[1]);
+                    field.resetClickedCell();
                 }
                 return true;
             }
@@ -49,11 +48,9 @@ public class GameScreen extends ScreenAdapter {
                 Vector3 touchVector = cam.unproject(new Vector3(screenX, screenY, 0));
                 screenX = (int) touchVector.x;
                 screenY = (int) touchVector.y;
-                field.resetCheckedCell();
-                rulesController.updateAvailableCells();
                 if (field.anyCellTouched(screenX, screenY)) {
                     int[] cord = field.getTouchedCellCord(screenX, screenY);
-                    field.checkCell(cord[0], cord[1]);
+                    field.clickCell(cord[0], cord[1]);
                 }
                 return true;
             }
@@ -63,11 +60,9 @@ public class GameScreen extends ScreenAdapter {
                 Vector3 touchVector = cam.unproject(new Vector3(screenX, screenY, 0));
                 screenX = (int) touchVector.x;
                 screenY = (int) touchVector.y;
-                field.resetCheckedCell();
-                rulesController.updateAvailableCells();
                 if (field.anyCellTouched(screenX, screenY)) {
                     int[] cord = field.getTouchedCellCord(screenX, screenY);
-                    field.checkCell(cord[0], cord[1]);
+                    field.clickCell(cord[0], cord[1]);
                 }
                 return true;
             }

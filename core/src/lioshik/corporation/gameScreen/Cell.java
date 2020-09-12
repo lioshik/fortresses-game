@@ -88,6 +88,39 @@ public class Cell extends Sprite {
         }
     }
 
+    private float animClickUpDuration = 0.05f;
+    private float crAnimClickUpDuration = 2.0f; // > animUpDuration
+    private float animClickDownDuration = 0.05f;
+    private float crAnimClickDownDuration = 2.0f; // > animDownDuration
+    private boolean isClickUp = false;
+
+    private void transformClickUpAnimation(SpriteBatch batch) {
+        if (isClickUp) {
+            float scale = Math.min(1.0f, crAnimClickUpDuration / animClickUpDuration);
+            this.setPosition(this.getX() + this.getWidth() / 10.0f * scale, this.getY() + this.getHeight() / 10.0f * scale);
+            this.setSize(this.getWidth() + this.getWidth() * 0.1f * scale, this.getHeight() + this.getHeight()* 0.1f * scale);
+        } else {
+            float scale = Math.min(1.0f, crAnimClickDownDuration / animClickDownDuration);
+            scale = 1.0f - scale;
+            this.setPosition(this.getX() + this.getWidth() / 10.0f * scale, this.getY() + this.getHeight() / 10.0f * scale);
+            this.setSize(this.getWidth() + this.getWidth() * 0.1f * scale, this.getHeight() + this.getHeight()* 0.1f * scale);
+        }
+    }
+
+    public void startClickUpAnim() {
+        if (!isClickUp) {
+            isClickUp = true;
+            crAnimClickUpDuration = 0.0f;
+        }
+    }
+
+    public void startClickDownAnim() {
+        if (isClickUp) {
+            isClickUp = false;
+            crAnimClickDownDuration = 0.0f;
+        }
+    }
+
     public void startShakeAnim() {
         crAnimShakeDuration = 0.0f;
     }
@@ -140,10 +173,13 @@ public class Cell extends Sprite {
         crAnimShakeDuration += dt;
         crAnimDownDuration += dt;
         crAnimUpDuration += dt;
+        crAnimClickUpDuration += dt;
+        crAnimClickDownDuration += dt;
         Rectangle defaultBounds = this.getBoundingRectangle();
         transformAnimPaint(batch);
         transformShakeAnim(batch);
         transformUpAnimation(batch);
+        transformClickUpAnimation(batch);
         draw(batch);
         this.setBounds(defaultBounds.x, defaultBounds.y, defaultBounds.width, defaultBounds.width);
     }
