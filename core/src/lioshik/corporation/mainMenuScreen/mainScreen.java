@@ -117,7 +117,7 @@ public class mainScreen extends ScreenAdapter {
         buttonSinglePlayer = new ImageButton(new TextureRegionDrawable(TextureContainer.buttonSinglePlayerUp), new TextureRegionDrawable(TextureContainer.buttonSinglePlayerDown));
         buttonMultiPlayer = new ImageButton(new TextureRegionDrawable(TextureContainer.buttonMultiPlayerUp), new TextureRegionDrawable(TextureContainer.buttonMultiPlayerDown));
         buttonExit = new ImageButton(new TextureRegionDrawable(TextureContainer.buttonExitUp), new TextureRegionDrawable(TextureContainer.buttonExitDown));
-        float scale = stage.getWidth() / 2.0f / buttonSinglePlayer.getWidth();
+        float scale = Math.min(stage.getWidth() / 1.25f / buttonSinglePlayer.getWidth(), stage.getHeight() / 10 / buttonSinglePlayer.getHeight());
         buttonSinglePlayer.setWidth(buttonSinglePlayer.getWidth() * scale);
         buttonSinglePlayer.setHeight(buttonSinglePlayer.getHeight() * scale);
         buttonSinglePlayer.setPosition(stage.getWidth() / 2.0f - buttonSinglePlayer.getWidth() / 2.0f, stage.getHeight() / 2.0f - buttonSinglePlayer.getHeight() / 2.0f);
@@ -200,14 +200,14 @@ public class mainScreen extends ScreenAdapter {
         buttonPlayers2.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent e, float x, float y) {
-                game.setScreen(new GameScreen(2));
+                game.setScreen(new GameScreen(2, game));
             }
         });
 
         buttonPlayers3.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent e, float x, float y) {
-                game.setScreen(new GameScreen(3));
+                game.setScreen(new GameScreen(3, game));
             }
         });
     }

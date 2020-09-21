@@ -2,10 +2,10 @@ package lioshik.corporation.gameScreen;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.graphics.Color;
 
-import java.awt.*;
 import java.util.*;
 import java.util.List;
 
@@ -13,7 +13,7 @@ public class PlayingField {
     public List<List<Cell>> cellArray;
     public Set<int[]> checkedSet;
     public int widthCount, heightCount;
-    private Rectangle tableRectangle;
+    public Rectangle tableRectangle;
     private float lineWidth;
     public float targetLineScale = 0.0f;
     private float crLineScale = 0.0f;
@@ -84,7 +84,7 @@ public class PlayingField {
         checkedSet.clear();
     }
 
-    private float speedLineMove = 1f / 3f * 8;
+    private float speedLineMove = 1f / 3f * 6;
     private void moveLine(float dt) {
         if (crLineScale < targetLineScale) {
             crLineScale += speedLineMove * dt;

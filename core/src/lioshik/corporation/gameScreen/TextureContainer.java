@@ -6,6 +6,10 @@ import com.badlogic.gdx.graphics.Texture;
 
 public class TextureContainer {
     public static Texture titleTexture = new Texture(Gdx.files.internal("title_texture.png"));
+    public static Texture buttonMenuUp = new Texture(Gdx.files.internal("button_home_default.png"));
+    public static Texture buttonMenuDown = new Texture(Gdx.files.internal("button_home_pressed.png"));
+    public static Texture buttonAgainUp = new Texture(Gdx.files.internal("button_again_default.png"));
+    public static Texture buttonAgainDown = new Texture(Gdx.files.internal("button_again_pressed.png"));
     public static Texture buttonBackUp = new Texture(Gdx.files.internal("button_back_default.png"));
     public static Texture buttonBackDown = new Texture(Gdx.files.internal("button_back_pressed.png"));
     public static Texture buttonSinglePlayerUp = new Texture(Gdx.files.internal("button_one_player_default.png"));
@@ -35,4 +39,8 @@ public class TextureContainer {
     public static final Color color2locked = new Color(227 / 255f, 155 / 255f, 0, 255);
     public static final Color color3 = new Color(10 / 255f, 132 / 255f, 255 / 255f, 255 / 255f);
     public static final Color color3locked = new Color(21 / 255f, 110 / 255f, 193 / 255f, 255 / 255f);
+    public static final Texture titleColor1lost = new Texture(Gdx.files.internal("title_green_lost.png"));
+    public static final Texture titleColor2lost = new Texture(Gdx.files.internal("title_yellow_lost.png"));
+    public static final Texture titleColor3lost = new Texture(Gdx.files.internal("title_blue_lost.png"));
+
 }

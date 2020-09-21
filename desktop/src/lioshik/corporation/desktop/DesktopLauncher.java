@@ -7,10 +7,8 @@ import lioshik.corporation.MyGdxGame;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.height = 400;
-		config.width = 600;
-		config.x = 300;
-		config.y = 100;
+		config.width = 500;
+		config.height = 800;
 		new LwjglApplication(new MyGdxGame(), config);
 	}
 }

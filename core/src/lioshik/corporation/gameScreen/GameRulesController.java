@@ -53,15 +53,18 @@ public class GameRulesController {
                 oneTurnCount = 0;
                 game.field.nextLineColorState = colors[whichTurn];
             }
-            updateAvailableCells();
+            if (!updateAvailableCells()){
+                game.gameEndDialog(whichTurn);
+            }
         } else {
             game.field.cellArray.get(x).get(y).startShakeAnim();
         }
     }
 
-    public void updateAvailableCells() {
+    boolean updateAvailableCells() {
         game.field.resetCheckedCell();
         Cell.ColorState crLockedColor = null, crTargetColor = null;
+        boolean returnValue = false;
         switch (whichTurn) {
             case 0:
                 crLockedColor = Cell.ColorState.COLOR1Locked;
@@ -80,9 +83,11 @@ public class GameRulesController {
             for (int y = 0; y < game.field.heightCount; y++) {
                 if (cellAvailableForColor(x, y, crLockedColor, crTargetColor)) {
                     game.field.checkCell(x, y);
+                    returnValue = true;
                 }
             }
         }
+        return returnValue;
     }
 
     public boolean cellAvailableForColor(int x, int y, Cell.ColorState lockedColor, Cell.ColorState targetColor) {

@@ -1,8 +1,7 @@
 package lioshik.corporation.gameScreen;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-
-import java.awt.*;
+import com.badlogic.gdx.math.Rectangle;
 
 public class MyShapeRenderer extends ShapeRenderer {
 
