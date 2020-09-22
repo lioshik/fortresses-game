@@ -94,7 +94,7 @@ public class GameScreen extends ScreenAdapter {
         bgPixmap.setColor(new Color(1, 1, 1, 0.75f));
         bgPixmap.fill();
         t.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(bgPixmap))));
-        Image title = new Image(new Texture[] {TextureContainer.titleColor1lost, TextureContainer.titleColor2lost, TextureContainer.titleColor3lost}[whichTurn]);
+        Image title = new Image(new Texture[] {TextureContainer.titleColor1lost, TextureContainer.titleColor2lost, TextureContainer.titleColor3lost, TextureContainer.titleColor4ost}[whichTurn]);
         float szScale = 0.9f;
         title.setSize(t.getWidth() * szScale, title.getHeight() * t.getWidth() / title.getWidth() * szScale);
         title.setPosition(t.getWidth() / 2 - title.getWidth() / 2, t.getHeight() * 0.7f);

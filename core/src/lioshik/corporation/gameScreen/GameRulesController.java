@@ -10,7 +10,7 @@ public class GameRulesController {
     private boolean[] firstTurn;
     private int oneTurnCount= 0;
     private int playersCount;
-    private final Cell.ColorState[] colors = {Cell.ColorState.COLOR1, Cell.ColorState.COLOR2, Cell.ColorState.COLOR3};
+    private final Cell.ColorState[] colors = {Cell.ColorState.COLOR1, Cell.ColorState.COLOR2, Cell.ColorState.COLOR3, Cell.ColorState.COLOR4};
 
     public GameRulesController(GameScreen game, int playersCount) {
         this.game = game;
@@ -36,6 +36,10 @@ public class GameRulesController {
             case 2:
                 crLockedColor = Cell.ColorState.COLOR3Locked;
                 crTargetColor = Cell.ColorState.COLOR3;
+                break;
+            case 3:
+                crLockedColor = Cell.ColorState.COLOR4Locked;
+                crTargetColor = Cell.ColorState.COLOR4;
                 break;
         }
         if (cellAvailableForColor(x, y, crLockedColor, crTargetColor)) {
@@ -77,6 +81,10 @@ public class GameRulesController {
             case 2:
                 crLockedColor = Cell.ColorState.COLOR3Locked;
                 crTargetColor = Cell.ColorState.COLOR3;
+                break;
+            case 3:
+                crLockedColor = Cell.ColorState.COLOR4Locked;
+                crTargetColor = Cell.ColorState.COLOR4;
                 break;
         }
         for (int x = 0; x < game.field.widthCount; x++) {

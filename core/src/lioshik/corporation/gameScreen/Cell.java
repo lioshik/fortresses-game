@@ -13,11 +13,13 @@ public class Cell extends Sprite {
         COLOR2,
         COLOR2Locked,
         COLOR3,
-        COLOR3Locked
+        COLOR3Locked,
+        COLOR4,
+        COLOR4Locked
     }
     public ColorState state;
     public boolean isLocked() {
-        return state == ColorState.COLOR2Locked || state == ColorState.COLOR1Locked;
+        return state == ColorState.COLOR2Locked || state == ColorState.COLOR1Locked || state == ColorState.COLOR3Locked || state == ColorState.COLOR1Locked;
     }
 
     public Cell(float posX, float posY, float size) {
@@ -103,6 +105,7 @@ public class Cell extends Sprite {
             float scale = Math.min(1.0f, crAnimClickDownDuration / animClickDownDuration);
             scale = 1.0f - scale;
             this.setPosition(this.getX() + this.getWidth() / 10.0f * scale, this.getY() + this.getHeight() / 10.0f * scale);
+            this.setPosition(this.getX() + this.getWidth() / 10.0f * scale, this.getY() + this.getHeight() / 10.0f * scale);
             this.setSize(this.getWidth() + this.getWidth() * 0.1f * scale, this.getHeight() + this.getHeight()* 0.1f * scale);
         }
     }
@@ -164,6 +167,13 @@ public class Cell extends Sprite {
             case COLOR3Locked:
                 this.setTexture(TextureContainer.cellColor3locked);
                 break;
+            case COLOR4:
+                this.setTexture(TextureContainer.cellColor4);
+                break;
+            case COLOR4Locked:
+                this.setTexture(TextureContainer.cellColor4locked);
+                break;
+
         }
         crAnimPaintDuration = 0.0f;
     }

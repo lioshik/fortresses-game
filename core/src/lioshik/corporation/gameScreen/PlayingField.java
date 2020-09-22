@@ -75,10 +75,8 @@ public class PlayingField {
 
     public void resetCheckedCell() {
         Iterator<int[]> it = checkedSet.iterator();
-        System.out.println(checkedSet.size());
         while (it.hasNext()) {
             int[] cr = it.next();
-            System.out.println(cr[0] + " " + cr[1]);
             cellArray.get(cr[0]).get(cr[1]).startDownAnimation();
         }
         checkedSet.clear();
@@ -106,6 +104,8 @@ public class PlayingField {
                 return TextureContainer.color2;
             case COLOR3:
                 return TextureContainer.color3;
+            case COLOR4:
+                return TextureContainer.color4;
         }
         // never reached
         return null;
@@ -118,6 +118,8 @@ public class PlayingField {
                 return TextureContainer.color2locked;
             case COLOR3:
                 return  TextureContainer.color3locked;
+            case COLOR4:
+                return TextureContainer.color4locked;
         }
         // never reached
         return null;

@@ -30,17 +30,22 @@ public class TextureContainer {
     public static Texture cellColor1 = new Texture(Gdx.files.internal("texture_color1_cell.png"));
     public static Texture cellColor2 = new Texture(Gdx.files.internal("texture_color2_cell.png"));
     public static Texture cellColor3 = new Texture(Gdx.files.internal("texture_color3_cell.png"));
+    public static Texture cellColor4 = new Texture(Gdx.files.internal("texture_color4_cell.png"));
     public static Texture cellColor1locked = new Texture(Gdx.files.internal("texture_color1_locked_cell.png"));
     public static Texture cellColor2locked = new Texture(Gdx.files.internal("texture_color2_locked_cell.png"));
     public static Texture cellColor3locked = new Texture(Gdx.files.internal("texture_color3_locked_cell.png"));
+    public static Texture cellColor4locked = new Texture(Gdx.files.internal("texture_color4_locked_cell.png"));
     public static final Color color1 = new Color(50 / 255f, 215 / 255f, 76 / 255f, 255 / 255f);
     public static final Color color1locked = new Color(40 / 255f, 150 / 255f, 68 / 255f, 255 / 255f);
     public static final Color color2 = new Color(255 / 255f, 204 / 255f, 0, 255);
     public static final Color color2locked = new Color(227 / 255f, 155 / 255f, 0, 255);
     public static final Color color3 = new Color(10 / 255f, 132 / 255f, 255 / 255f, 255 / 255f);
     public static final Color color3locked = new Color(21 / 255f, 110 / 255f, 193 / 255f, 255 / 255f);
+    public static final Color color4 = new Color(255 / 255f, 52 / 255f, 95 / 255f, 255 / 255f);
+    public static final Color color4locked = new Color(206 / 255f, 45 / 255f, 80 / 255f, 255 / 255f);
     public static final Texture titleColor1lost = new Texture(Gdx.files.internal("title_green_lost.png"));
     public static final Texture titleColor2lost = new Texture(Gdx.files.internal("title_yellow_lost.png"));
     public static final Texture titleColor3lost = new Texture(Gdx.files.internal("title_blue_lost.png"));
+    public static final Texture titleColor4ost = new Texture(Gdx.files.internal("title_red_lost.png"));
 
 }

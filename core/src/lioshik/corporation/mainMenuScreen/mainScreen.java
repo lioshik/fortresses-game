@@ -200,7 +200,7 @@ public class mainScreen extends ScreenAdapter {
         buttonPlayers2.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent e, float x, float y) {
-                game.setScreen(new GameScreen(2, game));
+                game.setScreen(new GameScreen(4, game));
             }
         });
 
