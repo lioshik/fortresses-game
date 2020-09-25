@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 
 public class TextureContainer {
     public static Texture titleTexture = new Texture(Gdx.files.internal("title_texture.png"));
+    public static Texture titleLAN = new Texture(Gdx.files.internal("title_LAN.png"));
     public static Texture buttonMenuUp = new Texture(Gdx.files.internal("button_home_default.png"));
     public static Texture buttonMenuDown = new Texture(Gdx.files.internal("button_home_pressed.png"));
     public static Texture buttonAgainUp = new Texture(Gdx.files.internal("button_again_default.png"));
@@ -18,6 +19,10 @@ public class TextureContainer {
     public static Texture buttonMultiPlayerDown = new Texture(Gdx.files.internal("button_multiplayer_pressed.png"));
     public static Texture buttonExitUp = new Texture(Gdx.files.internal("button_exit_default.png"));
     public static Texture buttonExitDown = new Texture(Gdx.files.internal("button_exit_pressed.png"));
+    public static Texture buttonHostUp = new Texture(Gdx.files.internal("button_host_default.png"));
+    public static Texture buttonHostDown = new Texture(Gdx.files.internal("button_host_pressed.png"));
+    public static Texture buttonJoinUp = new Texture(Gdx.files.internal("button_join_default.png"));
+    public static Texture buttonJoinDown = new Texture(Gdx.files.internal("button_join_pressed.png"));
     public static Texture buttonLanUp = new Texture(Gdx.files.internal("button_LAN_default.png"));
     public static Texture buttonLanDown = new Texture(Gdx.files.internal("button_LAN_pressed.png"));
     public static Texture buttonVs1Up = new Texture(Gdx.files.internal("button_vs1_default.png"));
