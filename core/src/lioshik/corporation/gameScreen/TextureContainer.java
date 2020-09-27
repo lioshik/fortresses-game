@@ -11,6 +11,10 @@ public class TextureContainer {
     public static Texture buttonMenuDown = new Texture(Gdx.files.internal("button_home_pressed.png"));
     public static Texture buttonAgainUp = new Texture(Gdx.files.internal("button_again_default.png"));
     public static Texture buttonAgainDown = new Texture(Gdx.files.internal("button_again_pressed.png"));
+    public static Texture buttonCancelUp = new Texture(Gdx.files.internal("button_cancel_default.png"));
+    public static Texture buttonCancelDown = new Texture(Gdx.files.internal("button_cancel_pressed.png"));
+    public static Texture buttonLaunchUp = new Texture(Gdx.files.internal("button_launch_default.png"));
+    public static Texture buttonLaunchDown = new Texture(Gdx.files.internal("button_launch_pressed.png"));
     public static Texture buttonBackUp = new Texture(Gdx.files.internal("button_back_default.png"));
     public static Texture buttonBackDown = new Texture(Gdx.files.internal("button_back_pressed.png"));
     public static Texture buttonSinglePlayerUp = new Texture(Gdx.files.internal("button_one_player_default.png"));

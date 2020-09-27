@@ -3,7 +3,7 @@ package lioshik.corporation.gameScreen.client;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
-import lioshik.corporation.gameScreen.MyGdxGame;
+import lioshik.corporation.MyGdxGame;
 
 public class HtmlLauncher extends GwtApplication {
 

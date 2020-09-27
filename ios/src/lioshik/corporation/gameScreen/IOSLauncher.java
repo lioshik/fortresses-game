@@ -1,5 +1,6 @@
 package lioshik.corporation.gameScreen;
 
+import lioshik.corporation.MyGdxGame;
 import org.robovm.apple.foundation.NSAutoreleasePool;
 import org.robovm.apple.uikit.UIApplication;
 

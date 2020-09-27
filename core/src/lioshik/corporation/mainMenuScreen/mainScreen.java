@@ -11,14 +11,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import javafx.concurrent.Task;
-import lioshik.corporation.LANscreen.LANscreen;
+import com.badlogic.gdx.utils.Null;
+import lioshik.corporation.LANscreen.LANMenuScreen;
 import lioshik.corporation.gameScreen.GameScreen;
 import lioshik.corporation.gameScreen.TextureContainer;
 
-import javax.swing.Timer;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.Timer;
 import java.util.TimerTask;
 
 public class mainScreen extends ScreenAdapter {
@@ -49,7 +47,7 @@ public class mainScreen extends ScreenAdapter {
 
     public mainScreen(Game g) {
         game = g;
-        screenLAN = new LANscreen(this, game);
+        screenLAN = new LANMenuScreen(this, game);
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
         buttonSinglePlayer = new ImageButton(new TextureRegionDrawable(TextureContainer.buttonSinglePlayerUp), new TextureRegionDrawable(TextureContainer.buttonSinglePlayerDown));
@@ -142,7 +140,7 @@ public class mainScreen extends ScreenAdapter {
                     public void run() {
                         hideAllButtons();
                         try {
-                            Thread.currentThread().sleep(200);
+                            Thread.currentThread().sleep(250);
                         } catch (InterruptedException ex) {
                             ex.printStackTrace();
                         }
@@ -277,7 +275,6 @@ public class mainScreen extends ScreenAdapter {
 
     @Override
     public void show() {
-        Gdx.input.setInputProcessor(stage);
         buttonLAN.setVisible(true);
         buttonSinglePlayer.setVisible(true);
         buttonExit.setVisible(true);
@@ -286,6 +283,13 @@ public class mainScreen extends ScreenAdapter {
         addTransformAnim(buttonMultiPlayer, false, false, 0f, 0.2f);
         addTransformAnim(buttonLAN, true, false, 0f, 0.2f);
         addTransformAnim(buttonExit, false, false, 0f, 0.2f);
+        Timer t = new Timer();
+        t.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                Gdx.input.setInputProcessor(stage);
+            }
+        }, 250);
     }
     @Override
     public void render(float dt) {
