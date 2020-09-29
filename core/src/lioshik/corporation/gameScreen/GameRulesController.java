@@ -1,16 +1,18 @@
 package lioshik.corporation.gameScreen;
 
+import com.badlogic.gdx.Gdx;
+
 import java.util.ArrayDeque;
 import java.util.Queue;
 
 public class GameRulesController {
     GameScreen game;
 
-    private int whichTurn = 0;
+    public int whichTurn = 0;
     private boolean[] firstTurn;
-    private int oneTurnCount= 0;
-    private int playersCount;
-    private final Cell.ColorState[] colors = {Cell.ColorState.COLOR1, Cell.ColorState.COLOR2, Cell.ColorState.COLOR3, Cell.ColorState.COLOR4};
+    public int oneTurnCount= 0;
+    public int playersCount;
+    public final Cell.ColorState[] colors = {Cell.ColorState.COLOR1, Cell.ColorState.COLOR2, Cell.ColorState.COLOR3, Cell.ColorState.COLOR4};
 
     public GameRulesController(GameScreen game, int playersCount) {
         this.game = game;
@@ -62,6 +64,12 @@ public class GameRulesController {
             }
         } else {
             game.field.cellArray.get(x).get(y).startShakeAnim();
+        }
+    }
+
+    public void checkGameEnd(){
+        if (!updateAvailableCells()) {
+            game.gameEndDialog(whichTurn);
         }
     }
 

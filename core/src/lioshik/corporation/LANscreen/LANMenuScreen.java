@@ -169,13 +169,19 @@ public class LANMenuScreen extends ScreenAdapter {
         stage.addActor(serverDialogStage);
         generator.dispose();
         server = new GameServer(code, this);
-        client = new GameClient(this, code);
+        client = new GameClient(this, code, g);
         buttonCancel.addListener(new ClickListener() {
             @Override
             public void clicked (InputEvent event, float x, float y) {
                 serverDialogStage.remove();
                 crState = State.MAIN;
                 server.server.stop();
+            }
+        });
+        buttonLaunch.addListener(new ClickListener() {
+            @Override
+            public void clicked (InputEvent event, float x, float y) {
+                server.startGame();
             }
         });
     }
@@ -250,7 +256,7 @@ public class LANMenuScreen extends ScreenAdapter {
             @Override
             public void clicked (InputEvent event, float x, float y) {
                 try {
-                    client = new GameClient(LANMenuScreen.this, Integer.parseInt(serverCodeText.getText()));
+                    client = new GameClient(LANMenuScreen.this, Integer.parseInt(serverCodeText.getText()), g);
                 } catch (Exception e) {
                     playersLabel.setText("Ошибка подключения");
                 } finally {

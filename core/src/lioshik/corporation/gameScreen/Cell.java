@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 
 public class Cell extends Sprite {
-    enum ColorState {
+    public enum ColorState {
         EMPTY,
         COLOR1,
         COLOR1Locked,

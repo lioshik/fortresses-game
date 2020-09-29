@@ -5,6 +5,7 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import lioshik.corporation.LANscreen.LANMenuScreen;
+import lioshik.corporation.gameScreen.Cell;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,7 +22,6 @@ public class GameServer {
         for (int i = 0; i < players.size(); i++) {
             players.get(i).sendTCP(new PlayersCountInfo(players.size(), i));
         }
-        screen.setConnectedPlayersCount(players.size());
     }
 
     public GameServer(int port, final LANMenuScreen screen) {
@@ -38,6 +38,11 @@ public class GameServer {
         }
         Kryo kryo = server.getKryo();
         kryo.register(PlayersCountInfo.class);
+        kryo.register(StartGameInfo.class);
+        kryo.register(GameUpdateInfo.class);
+        kryo.register(Cell.ColorState[][].class);
+        kryo.register(Cell.ColorState[].class);
+        kryo.register(Cell.ColorState.class);
         server.addListener(new Listener() {
             @Override
             public void connected (Connection connection) {
@@ -49,7 +54,22 @@ public class GameServer {
                 players.remove(connection);
                 updateLabels();
             }
+
+            @Override
+            public void received (Connection connection, Object object) {
+                if (object instanceof GameUpdateInfo) {
+                    for (int i = 0; i < players.size(); i++) {
+                        players.get(i).sendTCP((GameUpdateInfo)(object));
+                    }
+                }
+            }
         });
         System.out.println("Server started");
+    }
+
+    public void startGame() {
+        for (int i = 0; i < players.size(); i++) {
+            players.get(i).sendTCP(new StartGameInfo());
+        }
     }
 }

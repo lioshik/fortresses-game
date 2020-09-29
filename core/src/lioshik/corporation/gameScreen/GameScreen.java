@@ -28,9 +28,10 @@ public class GameScreen extends ScreenAdapter {
     public GameRulesController rulesController;
     public OrthographicCamera cam;
     public Stage uiStage;
-
+    public InputAdapter inputAdapter;
     public int players;
     public Game game;
+    public boolean addPlayAgainButton = true;
 
     public GameScreen(int p, Game g) {
         players = p;
@@ -45,7 +46,7 @@ public class GameScreen extends ScreenAdapter {
         batch = new SpriteBatch();
         field = new PlayingField(10, 10, new Rectangle(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
         rulesController = new GameRulesController(this, players);
-        Gdx.input.setInputProcessor(new InputAdapter(){
+        inputAdapter = new InputAdapter() {
             @Override
             public boolean touchUp(int screenX, int screenY, int pointer, int button) {
                 Vector3 touchVector = cam.unproject(new Vector3(screenX, screenY, 0));
@@ -54,8 +55,8 @@ public class GameScreen extends ScreenAdapter {
                 if (field.anyCellTouched(screenX, screenY)) {
                     int[] cord = field.getTouchedCellCord(screenX, screenY);
                     rulesController.cellTouched(cord[0], cord[1]);
-                    field.resetClickedCell();
                 }
+                field.resetClickedCell();
                 return true;
             }
 
@@ -82,7 +83,8 @@ public class GameScreen extends ScreenAdapter {
                 }
                 return true;
             }
-        });
+        };
+        Gdx.input.setInputProcessor(inputAdapter);
     }
 
     public void gameEndDialog(int whichTurn) {
@@ -119,11 +121,15 @@ public class GameScreen extends ScreenAdapter {
                 game.setScreen(new GameScreen(players, game));
             }
         });
-        t.addActor(buttonAgain);
+        if (addPlayAgainButton)
+            t.addActor(buttonAgain);
         t.addActor(buttonMenu);
+        uiStage.getActors().clear();
         uiStage.addActor(t);
         Gdx.input.setInputProcessor(uiStage);
     }
+
+
 
     @Override
     public void render (float dt) {
