@@ -19,7 +19,7 @@ public class Cell extends Sprite {
     }
     public ColorState state;
     public boolean isLocked() {
-        return state == ColorState.COLOR2Locked || state == ColorState.COLOR1Locked || state == ColorState.COLOR3Locked || state == ColorState.COLOR1Locked;
+        return state == ColorState.COLOR2Locked || state == ColorState.COLOR1Locked || state == ColorState.COLOR3Locked || state == ColorState.COLOR4Locked;
     }
 
     public Cell(float posX, float posY, float size) {

@@ -147,14 +147,20 @@ public class LANMenuScreen extends ScreenAdapter {
         BitmapFont font;
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("game_font.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 30;
+        parameter.size = 90;
         parameter.characters = "ПКйцукенгшщзхъфывапролджэячсмитьбю1234567890: /";
         font = generator.generateFont(parameter);
         int code = new Random().nextInt() % (20000) + 30000;
         Label serverCodeText = new Label("Код доступа: " + code, new Label.LabelStyle(font, Color.BLACK));
+        serverCodeText.setFontScale(serverDialogStage.getWidth() * 0.55f  / serverCodeText.getWidth());
+        serverCodeText.setHeight(serverDialogStage.getHeight() / 5);
+        serverCodeText.setAlignment(Align.center);
         serverCodeText.setPosition((serverDialogStage.getWidth() - serverCodeText.getWidth()) / 2.0f, (serverDialogStage.getHeight() * 0.75f - serverCodeText.getHeight() / 2.0f));
         playersLabel = new Label("Подключено игроков: " + 0 + "/4", new Label.LabelStyle(font, Color.BLACK));
-        playersLabel.setPosition((serverDialogStage.getWidth() - playersLabel.getWidth()) / 2.0f, (serverDialogStage.getHeight() * 0.75f - playersLabel.getHeight() / 2.0f) - serverCodeText.getHeight() * 1.5f);
+        playersLabel.setFontScale(serverDialogStage.getWidth()* 0.9f  / playersLabel.getWidth());
+        playersLabel.setHeight(serverDialogStage.getHeight() / 5);
+        playersLabel.setAlignment(Align.center);
+        playersLabel.setPosition((serverDialogStage.getWidth()- playersLabel.getWidth()) / 2.0f, (serverDialogStage.getHeight() * 0.75f - playersLabel.getHeight() / 2.0f) - serverCodeText.getHeight() * 1.5f);
         ImageButton buttonCancel = new ImageButton(new TextureRegionDrawable(TextureContainer.buttonCancelUp), new TextureRegionDrawable(TextureContainer.buttonCancelDown));
         ImageButton buttonLaunch = new ImageButton(new TextureRegionDrawable(TextureContainer.buttonLaunchUp), new TextureRegionDrawable(TextureContainer.buttonLaunchDown));
         float scale = serverDialogStage.getWidth() / 2.5f / buttonCancel.getWidth();
@@ -162,10 +168,10 @@ public class LANMenuScreen extends ScreenAdapter {
         buttonLaunch.setSize(buttonCancel.getWidth(), buttonCancel.getHeight());
         buttonCancel.setPosition(serverDialogStage.getWidth() * 0.25f - buttonCancel.getWidth() / 2f, buttonCancel.getHeight());
         buttonLaunch.setPosition(serverDialogStage.getWidth() - (buttonCancel.getWidth() + buttonCancel.getX()), buttonCancel.getY());
-        serverDialogStage.addActor(buttonCancel);
-        serverDialogStage.addActor(buttonLaunch);
         serverDialogStage.addActor(serverCodeText);
         serverDialogStage.addActor(playersLabel);
+        serverDialogStage.addActor(buttonCancel);
+        serverDialogStage.addActor(buttonLaunch);
         stage.addActor(serverDialogStage);
         generator.dispose();
         server = new GameServer(code, this);
@@ -201,10 +207,12 @@ public class LANMenuScreen extends ScreenAdapter {
         BitmapFont font;
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("game_font.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 30;
+        parameter.size = 90;
         parameter.characters = "ПВОКйцукенгшщзхъфывапролджэячсмитьбю1234567890: /";
         font = generator.generateFont(parameter);
         final TextField serverCodeText = new TextField("Введите код", new TextField.TextFieldStyle(font, Color.BLACK, null, null, null));
+        float fieldScale = Math.min(clientDialogStage.getWidth() * 0.9f / serverCodeText.getWidth(), clientDialogStage.getHeight() / serverCodeText.getHeight());
+        serverCodeText.setWidth(clientDialogStage.getWidth() * 0.9f);
         serverCodeText.setTextFieldFilter(new TextField.TextFieldFilter() {
             @Override
             public boolean acceptChar(TextField textField, char c) {
@@ -228,6 +236,7 @@ public class LANMenuScreen extends ScreenAdapter {
         });
         serverCodeText.setPosition((clientDialogStage.getWidth() - serverCodeText.getWidth()) / 2.0f, (clientDialogStage.getHeight() * 0.75f - serverCodeText.getHeight() / 2.0f));
         playersLabel = new Label("Подключено игркоков: 0/4", new Label.LabelStyle(font, Color.BLACK));
+        playersLabel.setFontScale(clientDialogStage.getWidth()* 0.9f  / playersLabel.getWidth());
         playersLabel.setPosition((clientDialogStage.getWidth() - playersLabel.getWidth()) / 2.0f, (clientDialogStage.getHeight() * 0.75f - playersLabel.getHeight() / 2.0f) - serverCodeText.getHeight() * 1.5f);
         playersLabel.setText("");
         playersLabel.setAlignment(Align.center);
@@ -238,10 +247,10 @@ public class LANMenuScreen extends ScreenAdapter {
         buttonLaunch.setSize(buttonCancel.getWidth(), buttonCancel.getHeight());
         buttonCancel.setPosition(clientDialogStage.getWidth() * 0.25f - buttonCancel.getWidth() / 2f, buttonCancel.getHeight());
         buttonLaunch.setPosition(clientDialogStage.getWidth() - (buttonCancel.getWidth() + buttonCancel.getX()), buttonCancel.getY());
-        clientDialogStage.addActor(buttonCancel);
-        clientDialogStage.addActor(buttonLaunch);
         clientDialogStage.addActor(serverCodeText);
         clientDialogStage.addActor(playersLabel);
+        clientDialogStage.addActor(buttonCancel);
+        clientDialogStage.addActor(buttonLaunch);
         stage.addActor(clientDialogStage);
         generator.dispose();
         buttonCancel.addListener(new ClickListener() {

@@ -9,6 +9,7 @@ public class GameRulesController {
     GameScreen game;
 
     public int whichTurn = 0;
+    public int lastTurn = 0;
     private boolean[] firstTurn;
     public int oneTurnCount= 0;
     public int playersCount;
@@ -45,6 +46,7 @@ public class GameRulesController {
                 break;
         }
         if (cellAvailableForColor(x, y, crLockedColor, crTargetColor)) {
+            lastTurn = whichTurn;
             firstTurn[whichTurn] = false;
             if (game.field.cellArray.get(x).get(y).state == Cell.ColorState.EMPTY) {
                 game.field.cellArray.get(x).get(y).changeColor(crTargetColor);
@@ -59,8 +61,20 @@ public class GameRulesController {
                 oneTurnCount = 0;
                 game.field.nextLineColorState = colors[whichTurn];
             }
-            if (!updateAvailableCells()){
-                game.gameEndDialog(whichTurn);
+            int skipped = 0;
+            while (!updateAvailableCells() && skipped < playersCount - 1) {
+                oneTurnCount = 0;
+                whichTurn = (whichTurn + 1) % playersCount;
+                if (game.field.crLineScale != 0) {
+                    game.field.nextLineColorState = colors[whichTurn];
+                } else {
+                    game.field.crLineColorState = colors[whichTurn];
+                }
+                game.field.targetLineScale = 0;
+                skipped++;
+            }
+            if (skipped == playersCount - 1) {
+                game.gameEndDialog(lastTurn);
             }
         } else {
             game.field.cellArray.get(x).get(y).startShakeAnim();
@@ -68,8 +82,20 @@ public class GameRulesController {
     }
 
     public void checkGameEnd(){
-        if (!updateAvailableCells()) {
-            game.gameEndDialog(whichTurn);
+        int skipped = 0;
+        while (!updateAvailableCells() && skipped < playersCount - 1) {
+            oneTurnCount = 0;
+            whichTurn = (whichTurn + 1) % playersCount;
+            if (game.field.crLineScale != 0) {
+                game.field.nextLineColorState = colors[whichTurn];
+            } else {
+                game.field.crLineColorState = colors[whichTurn];
+            }
+            game.field.targetLineScale = 0;
+            skipped++;
+        }
+        if (skipped == playersCount - 1) {
+            game.gameEndDialog(lastTurn);
         }
     }
 

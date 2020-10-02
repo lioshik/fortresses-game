@@ -147,7 +147,7 @@ public class GameClient {
                         }
                     }
                 }
-                gameRulesController.checkGameEnd();
+                //gameRulesController.checkGameEnd();
             }
         });
     }

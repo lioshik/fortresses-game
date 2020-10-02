@@ -16,7 +16,7 @@ public class PlayingField {
     public Rectangle tableRectangle;
     private float lineWidth;
     public float targetLineScale = 0.0f;
-    private float crLineScale = 0.0f;
+    public float crLineScale = 0.0f;
     public Cell.ColorState crLineColorState = Cell.ColorState.COLOR1;
     public Cell.ColorState nextLineColorState;
 
