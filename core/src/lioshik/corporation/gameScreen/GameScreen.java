@@ -1,9 +1,6 @@
 package lioshik.corporation.gameScreen;
 
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -32,6 +29,7 @@ public class GameScreen extends ScreenAdapter {
     public int players;
     public Game game;
     public boolean addPlayAgainButton = true;
+    public ImageButton buttonMenu;
 
     public GameScreen(int p, Game g) {
         players = p;
@@ -44,11 +42,22 @@ public class GameScreen extends ScreenAdapter {
         cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         cam.position.set(cam.viewportWidth / 2f, cam.viewportHeight / 2f, 0);
         batch = new SpriteBatch();
-        field = new PlayingField(10, 10, new Rectangle(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+        field = new PlayingField(10, 10, new Rectangle(0, uiStage.getHeight() / 7 / 2, Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - uiStage.getHeight() / 7 / 2));
         rulesController = new GameRulesController(this, players);
+        buttonMenu = new ImageButton(new TextureRegionDrawable(TextureContainer.buttonContextMenuUp), new TextureRegionDrawable(TextureContainer.buttonContextMenuDown));
+        float buttonMenuSize = Math.min(uiStage.getHeight() / 7 / 2, uiStage.getWidth());
+        buttonMenu.setSize(buttonMenuSize * 0.9f, buttonMenuSize * 0.9f);
+        buttonMenu.setPosition(buttonMenuSize / 10, uiStage.getHeight() - buttonMenuSize * 1.1f);
+        buttonMenu.addListener(new ClickListener() {
+            public void clicked (InputEvent event, float x, float y) {
+                showMenu();
+            }
+        });
+        uiStage.addActor(buttonMenu);
         inputAdapter = new InputAdapter() {
             @Override
             public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+                uiStage.touchUp(screenX, screenY, pointer, button);
                 Vector3 touchVector = cam.unproject(new Vector3(screenX, screenY, 0));
                 screenX = (int) touchVector.x;
                 screenY = (int) touchVector.y;
@@ -62,6 +71,7 @@ public class GameScreen extends ScreenAdapter {
 
             @Override
             public boolean touchDragged(int screenX, int screenY, int pointer) {
+                uiStage.touchDragged(screenX, screenY, pointer);
                 Vector3 touchVector = cam.unproject(new Vector3(screenX, screenY, 0));
                 screenX = (int) touchVector.x;
                 screenY = (int) touchVector.y;
@@ -74,6 +84,7 @@ public class GameScreen extends ScreenAdapter {
 
             @Override
             public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+                uiStage.touchDown(screenX, screenY, pointer, button);
                 Vector3 touchVector = cam.unproject(new Vector3(screenX, screenY, 0));
                 screenX = (int) touchVector.x;
                 screenY = (int) touchVector.y;
@@ -85,6 +96,59 @@ public class GameScreen extends ScreenAdapter {
             }
         };
         Gdx.input.setInputProcessor(inputAdapter);
+    }
+
+    public Table menuTable;
+    public void showMenu() {
+        buttonMenu.setVisible(false);
+        menuTable = new Table();
+        ImageButton buttonContinue, buttonExit, buttonPlayAgain;
+        Image pauseTitle;
+        menuTable.setSize(field.tableRectangle.width, field.tableRectangle.height);
+        menuTable.setPosition(field.tableRectangle.x, field.tableRectangle.y);
+        Pixmap bgPixmap = new Pixmap(1,1, Pixmap.Format.RGBA8888);
+        bgPixmap.setColor(new Color(1, 1, 1, 0.75f));
+        bgPixmap.fill();
+        menuTable.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(bgPixmap))));
+        buttonContinue = new ImageButton(new TextureRegionDrawable(TextureContainer.buttonContinueUp), new TextureRegionDrawable(TextureContainer.buttonContinueDown));
+        buttonPlayAgain = new ImageButton(new TextureRegionDrawable(TextureContainer.buttonAgainUp), new TextureRegionDrawable(TextureContainer.buttonAgainDown));
+        buttonExit = new ImageButton(new TextureRegionDrawable(TextureContainer.buttonExitUp), new TextureRegionDrawable(TextureContainer.buttonExitDown));
+        pauseTitle = new Image(TextureContainer.titlePause);
+        float btnScale = Math.min(menuTable.getWidth() * 0.65f / buttonContinue.getWidth(), menuTable.getHeight() / 5.0f / buttonContinue.getHeight());
+        buttonContinue.setSize(buttonContinue.getWidth() * btnScale, buttonContinue.getHeight() * btnScale);
+        buttonExit.setSize(buttonContinue.getWidth(), buttonContinue.getHeight());
+        pauseTitle.setSize(buttonContinue.getWidth(), buttonContinue.getHeight());
+        buttonPlayAgain.setSize(buttonContinue.getWidth(), buttonContinue.getHeight());
+
+        buttonPlayAgain.setPosition((menuTable.getWidth() - buttonPlayAgain.getWidth()) / 2.0f, (menuTable.getHeight() - buttonPlayAgain.getHeight()) / 2.0f - pauseTitle.getHeight() * 0.5f);
+        buttonContinue.setPosition(buttonPlayAgain.getX(), buttonPlayAgain.getY() + buttonPlayAgain.getHeight() * 1.5f);
+        buttonExit.setPosition(buttonPlayAgain.getX(), buttonPlayAgain.getY() - buttonPlayAgain.getHeight() * 1.5f);
+        pauseTitle.setPosition(buttonPlayAgain.getX(), buttonContinue.getY() + pauseTitle.getHeight() * 1.5f);
+        menuTable.addActor(buttonContinue);
+        menuTable.addActor(pauseTitle);
+        if (addPlayAgainButton)
+            menuTable.addActor(buttonPlayAgain);
+        menuTable.addActor(buttonExit);
+        uiStage.addActor(menuTable);
+        buttonPlayAgain.addListener(new ClickListener() {
+            public void clicked (InputEvent event, float x, float y) {
+                game.setScreen(new GameScreen(players, game));
+            }
+        });
+        final InputProcessor prevProcessor = Gdx.input.getInputProcessor();
+        Gdx.input.setInputProcessor(uiStage);
+        buttonContinue.addListener(new ClickListener() {
+            public void clicked (InputEvent event, float x, float y) {
+                buttonMenu.setVisible(true);
+                Gdx.input.setInputProcessor(prevProcessor);
+                menuTable.remove();
+            }
+        });
+        buttonExit.addListener(new ClickListener() {
+            public void clicked (InputEvent event, float x, float y) {
+                game.setScreen(new mainScreen(game));
+            }
+        });
     }
 
     public void gameEndDialog(int whichTurn) {

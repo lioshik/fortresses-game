@@ -6,9 +6,14 @@ import com.badlogic.gdx.graphics.Texture;
 
 public class TextureContainer {
     public static Texture titleTexture = new Texture(Gdx.files.internal("title_texture.png"));
+    public static Texture titlePause = new Texture(Gdx.files.internal("title_pause.png"));
     public static Texture titleLAN = new Texture(Gdx.files.internal("title_LAN.png"));
     public static Texture buttonMenuUp = new Texture(Gdx.files.internal("button_home_default.png"));
     public static Texture buttonMenuDown = new Texture(Gdx.files.internal("button_home_pressed.png"));
+    public static Texture buttonContextMenuUp = new Texture(Gdx.files.internal("button_context_menu_default.png"));
+    public static Texture buttonContextMenuDown = new Texture(Gdx.files.internal("button_context_menu_pressed.png"));
+    public static Texture buttonContinueUp = new Texture(Gdx.files.internal("button_continue_default.png"));
+    public static Texture buttonContinueDown = new Texture(Gdx.files.internal("button_continue_pressed.png"));
     public static Texture buttonAgainUp = new Texture(Gdx.files.internal("button_again_default.png"));
     public static Texture buttonAgainDown = new Texture(Gdx.files.internal("button_again_pressed.png"));
     public static Texture buttonCancelUp = new Texture(Gdx.files.internal("button_cancel_default.png"));

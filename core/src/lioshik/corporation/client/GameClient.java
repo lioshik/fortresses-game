@@ -80,6 +80,7 @@ public class GameClient {
                 Gdx.input.setInputProcessor(new InputAdapter() {
                     @Override
                     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+                        gameScreen.uiStage.touchUp(screenX, screenY, pointer, button);
                         if (gameRulesController.whichTurn == playerIndex) {
                             gameScreen.inputAdapter.touchUp(screenX, screenY, pointer, button);
                             exportGame();
@@ -98,6 +99,7 @@ public class GameClient {
 
                     @Override
                     public boolean touchDragged(int screenX, int screenY, int pointer) {
+                        gameScreen.uiStage.touchDragged(screenX, screenY, pointer);
                         if (gameRulesController.whichTurn == playerIndex) {
                             gameScreen.inputAdapter.touchDragged(screenX, screenY, pointer);
                             return true;
@@ -114,6 +116,7 @@ public class GameClient {
 
                     @Override
                     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+                        gameScreen.uiStage.touchDown(screenX, screenY, pointer, button);
                         if (gameRulesController.whichTurn == playerIndex) {
                             gameScreen.inputAdapter.touchDown(screenX, screenY, pointer, button);
                             return true;
@@ -147,7 +150,6 @@ public class GameClient {
                         }
                     }
                 }
-                //gameRulesController.checkGameEnd();
             }
         });
     }

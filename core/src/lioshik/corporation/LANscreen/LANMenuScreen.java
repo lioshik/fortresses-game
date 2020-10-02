@@ -211,7 +211,6 @@ public class LANMenuScreen extends ScreenAdapter {
         parameter.characters = "ПВОКйцукенгшщзхъфывапролджэячсмитьбю1234567890: /";
         font = generator.generateFont(parameter);
         final TextField serverCodeText = new TextField("Введите код", new TextField.TextFieldStyle(font, Color.BLACK, null, null, null));
-        float fieldScale = Math.min(clientDialogStage.getWidth() * 0.9f / serverCodeText.getWidth(), clientDialogStage.getHeight() / serverCodeText.getHeight());
         serverCodeText.setWidth(clientDialogStage.getWidth() * 0.9f);
         serverCodeText.setTextFieldFilter(new TextField.TextFieldFilter() {
             @Override
@@ -239,6 +238,7 @@ public class LANMenuScreen extends ScreenAdapter {
         playersLabel.setFontScale(clientDialogStage.getWidth()* 0.9f  / playersLabel.getWidth());
         playersLabel.setPosition((clientDialogStage.getWidth() - playersLabel.getWidth()) / 2.0f, (clientDialogStage.getHeight() * 0.75f - playersLabel.getHeight() / 2.0f) - serverCodeText.getHeight() * 1.5f);
         playersLabel.setText("");
+        playersLabel.setHeight(clientDialogStage.getHeight() / 5);
         playersLabel.setAlignment(Align.center);
         ImageButton buttonCancel = new ImageButton(new TextureRegionDrawable(TextureContainer.buttonCancelUp), new TextureRegionDrawable(TextureContainer.buttonCancelDown));
         final ImageButton buttonLaunch = new ImageButton(new TextureRegionDrawable(TextureContainer.buttonJoinUp), new TextureRegionDrawable(TextureContainer.buttonJoinDown));
