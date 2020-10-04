@@ -73,7 +73,7 @@ public class GameClient {
         Gdx.app.postRunnable(new Runnable() {
             @Override
             public void run() {
-                gameScreen = new GameScreen(totalIndex, game);
+                gameScreen = new GameScreen(totalIndex, 0, game);
                 gameScreen.addPlayAgainButton = false;
                 game.setScreen(gameScreen);
                 gameRulesController = gameScreen.rulesController;

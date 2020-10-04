@@ -74,6 +74,7 @@ public class PlayingField {
     }
 
     public void resetCheckedCell() {
+
         Iterator<int[]> it = checkedSet.iterator();
         while (it.hasNext()) {
             int[] cr = it.next();

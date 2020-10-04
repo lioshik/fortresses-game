@@ -175,21 +175,42 @@ public class mainScreen extends ScreenAdapter {
         buttonPlayers2.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent e, float x, float y) {
-                game.setScreen(new GameScreen(2, game));
+                game.setScreen(new GameScreen(2, 0, game));
             }
         });
 
         buttonPlayers3.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent e, float x, float y) {
-                game.setScreen(new GameScreen(3, game));
+                game.setScreen(new GameScreen(3, 0, game));
             }
         });
 
         buttonPlayers4.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent e, float x, float y) {
-                game.setScreen(new GameScreen(4, game));
+                game.setScreen(new GameScreen(4, 0, game));
+            }
+        });
+
+        buttonVs1.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent e, float x, float y) {
+                game.setScreen(new GameScreen(2, 1, game));
+            }
+        });
+
+        buttonVs2.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent e, float x, float y) {
+                game.setScreen(new GameScreen(3, 2, game));
+            }
+        });
+
+        buttonVs3.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent e, float x, float y) {
+                game.setScreen(new GameScreen(4, 3, game));
             }
         });
     }

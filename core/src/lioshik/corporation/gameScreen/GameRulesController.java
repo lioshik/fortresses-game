@@ -1,6 +1,7 @@
 package lioshik.corporation.gameScreen;
 
 import com.badlogic.gdx.Gdx;
+import lioshik.corporation.gameAI.gameAI;
 
 import java.util.ArrayDeque;
 import java.util.Queue;
@@ -11,16 +12,22 @@ public class GameRulesController {
     public int whichTurn = 0;
     public int lastTurn = 0;
     private boolean[] firstTurn;
+    private boolean[] isPlayer;
     public int oneTurnCount= 0;
     public int playersCount;
+    public gameAI gameAI;
+    public boolean enableAI = true;
     public final Cell.ColorState[] colors = {Cell.ColorState.COLOR1, Cell.ColorState.COLOR2, Cell.ColorState.COLOR3, Cell.ColorState.COLOR4};
 
-    public GameRulesController(GameScreen game, int playersCount) {
+    public GameRulesController(GameScreen game, int playersCount, int bots) {
         this.game = game;
         this.playersCount = playersCount;
         firstTurn = new boolean[playersCount];
+        isPlayer = new boolean[playersCount];
         for (int i = 0; i < playersCount; i++) firstTurn[i] = true;
+        for (int i = 0; i < playersCount - bots; i++) isPlayer[i] = true;
         updateAvailableCells();
+        gameAI = new gameAI(game.field, this, game);
     }
 
     public void cellTouched(int x, int y) {
@@ -74,10 +81,32 @@ public class GameRulesController {
                 skipped++;
             }
             if (skipped == playersCount - 1) {
-                game.gameEndDialog(lastTurn);
+                game.gameEndDialog(whichTurn);
+                enableAI = false;
             }
         } else {
             game.field.cellArray.get(x).get(y).startShakeAnim();
+        }
+        switch (whichTurn) {
+            case 0:
+                crLockedColor = Cell.ColorState.COLOR1Locked;
+                crTargetColor = Cell.ColorState.COLOR1;
+                break;
+            case 1:
+                crLockedColor = Cell.ColorState.COLOR2Locked;
+                crTargetColor = Cell.ColorState.COLOR2;
+                break;
+            case 2:
+                crLockedColor = Cell.ColorState.COLOR3Locked;
+                crTargetColor = Cell.ColorState.COLOR3;
+                break;
+            case 3:
+                crLockedColor = Cell.ColorState.COLOR4Locked;
+                crTargetColor = Cell.ColorState.COLOR4;
+                break;
+        }
+        if (!isPlayer[whichTurn] && oneTurnCount == 0 && enableAI) {
+            gameAI.makeTurn(crTargetColor, crLockedColor, whichTurn);
         }
     }
 
@@ -100,7 +129,12 @@ public class GameRulesController {
     }
 
     boolean updateAvailableCells() {
-        game.field.resetCheckedCell();
+        Gdx.app.postRunnable(new Runnable() {
+            @Override
+            public void run() {
+                game.field.resetCheckedCell();
+            }
+        });
         Cell.ColorState crLockedColor = null, crTargetColor = null;
         boolean returnValue = false;
         switch (whichTurn) {
@@ -124,7 +158,16 @@ public class GameRulesController {
         for (int x = 0; x < game.field.widthCount; x++) {
             for (int y = 0; y < game.field.heightCount; y++) {
                 if (cellAvailableForColor(x, y, crLockedColor, crTargetColor)) {
-                    game.field.checkCell(x, y);
+                    if (isPlayer[whichTurn]) {
+                        final int finalX = x;
+                        final int finalY = y;
+                        Gdx.app.postRunnable(new Runnable() {
+                            @Override
+                            public void run() {
+                                game.field.checkCell(finalX, finalY);
+                            }
+                        });
+                    }
                     returnValue = true;
                 }
             }
