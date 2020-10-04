@@ -36,6 +36,8 @@ public class gameAI {
                     Thread.currentThread().sleep(200);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
+                    Gdx.input.setInputProcessor(processor);
+                    return;
                 }
                 List<List<Integer>> weights = new ArrayList<>();
                 weights = new ArrayList<List<Integer>>();
@@ -62,6 +64,8 @@ public class gameAI {
                         Thread.currentThread().sleep(200);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
+                        Gdx.input.setInputProcessor(processor);
+                        return;
                     }
                 }
             }
@@ -70,8 +74,13 @@ public class gameAI {
 
     public void stop() {
         try {
-            t.stop();
+            t.interrupt();
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            Thread.currentThread().sleep(50);
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
         Gdx.input.setInputProcessor(processor);
@@ -98,6 +107,7 @@ public class gameAI {
         this.crColor = crColor;
         this.crColorLocked = crColorLocked;
         this.whichTurn = whichTurn;
+
         t = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -105,6 +115,8 @@ public class gameAI {
                     Thread.currentThread().sleep(200);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
+                    Gdx.input.setInputProcessor(processor);
+                    return;
                 }
                 List<List<Integer>> weights = new ArrayList<>();
                 weights = new ArrayList<List<Integer>>();
@@ -131,6 +143,8 @@ public class gameAI {
                         Thread.currentThread().sleep(200);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
+                        Gdx.input.setInputProcessor(processor);
+                        return;
                     }
                 }
                 Thread.currentThread().interrupt();
