@@ -10,7 +10,9 @@ import lioshik.corporation.gameScreen.GameRulesController;
 import lioshik.corporation.gameScreen.GameScreen;
 import lioshik.corporation.gameScreen.PlayingField;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 public class gameAI {
     PlayingField field;
@@ -47,10 +49,13 @@ public class gameAI {
                 int turns = 0;
                 while (turns < 3) {
                     turns++;
-                    if (turns == 2 || rulesController.whichTurn != whichTurn) {
+                    if (turns == 3 || rulesController.whichTurn != whichTurn) {
                         Gdx.input.setInputProcessor(processor);
                     }
                     int[] turnCord = chooseMaxPos(weights);
+                    if (turns == 3 || rulesController.whichTurn != whichTurn) {
+                        Gdx.input.setInputProcessor(processor);
+                    }
                     initWeights(weights, crColorLocked, crColor);
                     increaseNearbyCells(turnCord[0], turnCord[1], weights);
                     try {
@@ -63,8 +68,12 @@ public class gameAI {
         });
     }
 
-    public void stop(){
-        t.stop();
+    public void stop() {
+        try {
+            t.stop();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         Gdx.input.setInputProcessor(processor);
     }
 
@@ -109,12 +118,15 @@ public class gameAI {
                 int turns = 0;
                 while (turns < 3) {
                     turns++;
-                    if (turns == 2 || rulesController.whichTurn != whichTurn) {
+                    if (turns == 3 || rulesController.whichTurn != whichTurn) {
                         Gdx.input.setInputProcessor(processor);
                     }
                     int[] turnCord = chooseMaxPos(weights);
+                    if (turns == 3 || rulesController.whichTurn != whichTurn) {
+                        Gdx.input.setInputProcessor(processor);
+                    }
                     initWeights(weights, crColorLocked, crColor);
-                    increaseNearbyCells(turnCord[0], turnCord[1], weights);
+                    //increaseNearbyCells(turnCord[0], turnCord[1], weights);
                     try {
                         Thread.currentThread().sleep(200);
                     } catch (InterruptedException e) {
@@ -133,16 +145,17 @@ public class gameAI {
             for (int j = 0; j < 10; j++) {
                 if (rulesController.cellAvailableForColor(i, j, crColorLocked, crColor)) {
                     if (field.cellArray.get(i).get(j).state == Cell.ColorState.COLOR1) {
-                        weights.get(i).set(j, 43);
+                        weights.get(i).set(j, 20 + 100000);
                     } else if (field.cellArray.get(i).get(j).state == Cell.ColorState.EMPTY) {
-                        weights.get(i).set(j, 30);
+                        weights.get(i).set(j, 0 + 100000);
                     } else {
-                        weights.get(i).set(j, 40);
+                        weights.get(i).set(j, 10 + 100000);
                     }
+                    weights.get(i).set(j, weights.get(i).get(j) - 2 * distToGreenCell(i, j));
+                    weights.get(i).set(j, weights.get(i).get(j) - distToAliveCell(i, j, whichTurn));
                 } else {
                     weights.get(i).set(j, -100000);
                 }
-                weights.get(i).set(j, weights.get(i).get(j) - distToGreenCell(i, j));
             }
         }
     }
@@ -199,6 +212,44 @@ public class gameAI {
             int crX = qu.peek()[0];
             int crY = qu.peek()[1];
             if (field.cellArray.get(crX).get(crY).state == Cell.ColorState.COLOR1) return dist.get(new int[]{crX, crY});
+            qu.remove();
+            for (int addX = -1; addX < 2; addX++) {
+                for (int addY = -1; addY < 2; addY++) {
+                    if (addX == 0 && addY == 0) continue;
+                    int newX = crX + addX;
+                    int newY = crY + addY;
+                    if (newX < 0 || newY < 0 || newX >= 10 || newY >= 10) continue;
+                    if (!used[newX][newY]) {
+                        used[newX][newY] = true;
+                        qu.offer(new int[] {newX, newY});
+                        dist.put(new int[]{newX, newY}, dist.get(new int[]{crX, crY}) + 1);
+                    }
+                }
+            }
+        }
+        return 0;
+    }
+
+    public int distToAliveCell(int x, int y, int whichTurn) {
+        Queue<int[]> qu = new ArrayDeque<>();
+        Map<int[], Integer> dist = new TreeMap<>(new Comparator<int[]>() {
+            @Override
+            public int compare(int[] o1, int[] o2) {
+                if (o1[0] == o2[0] && o1[1] == o2[1]) return 0;
+                if (o1[0] == o2[0]) return o1[1] - o2[1];
+                return o1[0] - o2[0];
+            }});
+        qu.offer(new int[] {x, y});
+        boolean used[][] = new boolean[10][10];
+        used[x][y] = true;
+        dist.put(new int[]{x, y}, 0);
+        while (!qu.isEmpty()) {
+            int crX = qu.peek()[0];
+            int crY = qu.peek()[1];
+            Cell.ColorState crState = field.cellArray.get(crX).get(crY).state;
+            if (whichTurn == 1 && crState == Cell.ColorState.COLOR2) return dist.get(new int[]{crX, crY});
+            if (whichTurn == 2 && crState == Cell.ColorState.COLOR3) return dist.get(new int[]{crX, crY});
+            if (whichTurn == 3 && crState == Cell.ColorState.COLOR4) return dist.get(new int[]{crX, crY});
             qu.remove();
             for (int addX = -1; addX < 2; addX++) {
                 for (int addY = -1; addY < 2; addY++) {
