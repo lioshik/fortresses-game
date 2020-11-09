@@ -139,7 +139,7 @@ public class GameScreen extends ScreenAdapter {
         buttonPlayAgain.addListener(new ClickListener() {
             public void clicked (InputEvent event, float x, float y) {
                 rulesController.gameAI.stop();
-                game.setScreen(new GameScreen(players, bots, game));
+                game.setScreen(new mainScreen(game));
             }
         });
         enableCellClick = false;

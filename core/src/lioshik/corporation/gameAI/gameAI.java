@@ -79,7 +79,7 @@ public class gameAI {
             e.printStackTrace();
         }
         try {
-            Thread.currentThread().sleep(50);
+            Thread.currentThread().sleep(210);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
